@@ -1,0 +1,57 @@
+{% extends "main/base.html" %}
+
+
+{% block title %}
+Главная - Образовательная Платформа по Интеллектуальному Праву
+{% endblock %}
+
+{% block content %}
+<div class="container text-center">
+    <div class="section">
+        <h1 class="display-4">Добро пожаловать на платформу ИНТЕЛЛЕКС</h1>
+        <p class="lead">
+            ИНТЕЛЛЕКС — это образовательная платформа, предоставляющая курсы по интеллектуальной собственности, 
+            созданные для широкой аудитории без специальной юридической подготовки. Мы предлагаем материалы в интерактивной форме, 
+            включая текст, видео, инфографику и анимации.
+        </p>
+        <p class="lead">
+            Наши курсы помогут вам разобраться с основами авторского права, патентов, торговых марок и других аспектов интеллектуальной собственности.
+        </p>
+        <img src="https://img.freepik.com/free-photo/close-up-idea-concept_23-2148882592.jpg" class="img-fluid rounded mt-4" alt="Интеллектуальная Собственность">
+    </div>
+    
+    <div class="section text-center mt-5">
+        <h2>Почему стоит выбрать нас?</h2>
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Интерактивные материалы</h5>
+                        <p class="card-text">Увлекательные курсы с текстами, видео, инфографикой и анимациями, помогающие усвоить информацию легче и быстрее.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Доступно каждому</h5>
+                        <p class="card-text">Наши курсы подходят как для новичков, так и для тех, кто уже имеет знания в области интеллектуальной собственности.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Сертификаты и прогресс</h5>
+                        <p class="card-text">Пройдите тесты и получите сертификат по завершению курса, отслеживайте свой прогресс и улучшайте свои навыки.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section mt-5">
+        <a href="{% url 'courses' %}" class="btn btn-primary btn-lg">Просмотреть Курсы</a>
+    </div>
+</div>
+{% endblock %}
