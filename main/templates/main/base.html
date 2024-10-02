@@ -29,6 +29,10 @@
         .content-wrap {
             flex: 1; /* Заставляет контент занимать всё доступное пространство */
         }
+        .text-margin {
+          margin-left: 15px;
+          margin-right: 15px;
+      }
     </style>
 </head>
   <body>
@@ -36,7 +40,9 @@
         <div class="col-md-3 mb-2 mb-md-0">
             <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none">
             {% comment %} <img src="https://ru.freepik.com/icon/book_16336048#fromView=search&page=1&position=17&uuid=1c5d3578-6de3-4eb2-bde9-69788a11d8b2" alt="Bootstrap" width="40" height="40"> {% endcomment %}
+            <div class="text-margin">
             <span class="fs-4">ИНТЕЛЛЕКС</span>
+            </div>
           </a>
         </div>
   
@@ -45,16 +51,15 @@
           <li><a href="{% url "about" %}" class="nav-link px-2 text-white">О нас</a></li> 
           <li><a href="{% url "courses" %}" class="nav-link px-2 text-white">Курсы</a></li>
         </ul>
-  
         <div class="col-md-3 text-end">
           {% if user.is_authenticated %}
             <a href="{% url 'profile' %}" class="text-white">Профиль</a>
             <a href="{% url 'logout' %}" class="text-white">Выйти</a>
           {% else %}
-            <a href="{% url 'register' %}" class="text-white">Зарегистрироваться</a>
-            <a href="{% url 'login' %}" class="text-white">Войти</a>
+            <a href="{% url 'register' %}" class="text-white text-margin">Зарегистрироваться</a>
+            <a href="{% url 'login' %}" class="text-white text-margin">Войти</a>
           {% endif %}
-        </div> 
+        </div>
       </header>
     
     <div class="content-wrap">
@@ -69,7 +74,7 @@
     </div>
     
     <footer class="footer-bg text-center py-4">
-      <p>&copy; 2024 НАЗВАНИЕ ПРОЕКТА. Все права защищены.</p>
+      <p>&copy; 2024 ИНТЕЛЛЕКС. Все права защищены.</p>
     </footer>
   </body>
 </html>
