@@ -1,0 +1,156 @@
+{% extends "main/base.html" %}
+
+{% block title %}
+{{title}}
+КУРС 3
+{% endblock %}
+
+{% block content %}
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Курс: третий курс</title>
+    <style>
+        .body1 {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            margin: 0;
+            padding: 0px;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px;
+            background-color: #0469c7;
+            color: white;
+        } 
+        .course-description {
+            margin: 10px 0;
+            font-size: 1.2em;
+            padding: 5px 0 5px 5px;
+        }
+        .topics {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+        .topic {
+            background-color: #f0f8ff;
+            border: 1px ;
+            border-radius: 10px;
+            width: 300px;
+            margin: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+        .topic img {
+            max-width: 100%;
+            border-radius: 5px;
+        }
+        .button {
+            background-color: #007acc;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .button:hover {
+            background-color: #005fa3;
+        }
+        .test-button {
+            display: block;
+            margin: 30px auto;
+            text-align: center;
+        }
+    </style>
+
+
+<header>
+    <h1>Курс: третий курс</h1>
+</header>
+
+<div class="course-description">
+    <p>Описание курса</p>
+</div>
+
+<div class="section">
+    <h2 class="text-center">Темы курса</h2>
+    <div class="row align-items-stretch">
+        <div class="col-md-4">
+            <div class="card">
+                {% comment %} <img src="https://via.placeholder.com/300x150" alt="Фотография как объект авторского права"> {% endcomment %}
+                <div class="card-body">
+                    <p class="card-title">Лекция 1</p>
+                    <h4 class="card-text">Название</h4>
+                    {% comment %} <a href="{% url "course1" %}" class="btn btn-primary">Записаться</a> {% endcomment %}
+                </div>
+                <a href="#" class="btn btn-primary">Изучить</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                {% comment %} <img src="https://via.placeholder.com/300x150" alt="Фотография как объект авторского права"> {% endcomment %}
+                <div class="card-body">
+                    <p class="card-title">Лекция 2</p>
+                    <h4 class="card-text">Название</h4>
+                    {% comment %} <a href="{% url "course1" %}" class="btn btn-primary">Записаться</a> {% endcomment %}
+                </div>
+                <a href="#" class="btn btn-primary">Изучить</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                {% comment %} <img src="https://via.placeholder.com/300x150" alt="Фотография как объект авторского права"> {% endcomment %}
+                <div class="card-body">
+                    <p class="card-title">Лекция 3</p>
+                    <h4 class="card-text">Название</h4>
+                    {% comment %} <a href="{% url "course1" %}" class="btn btn-primary">Записаться</a> {% endcomment %}
+                </div>
+                <a href="#" class="btn btn-primary">Изучить</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                {% comment %} <img src="https://via.placeholder.com/300x150" alt="Фотография как объект авторского права"> {% endcomment %}
+                <div class="card-body">
+                    <p class="card-title">Лекция 4</p>
+                    <h4 class="card-text">Название</h4>
+                    {% comment %} <a href="{% url "course1" %}" class="btn btn-primary">Записаться</a> {% endcomment %}
+                </div>
+                <a href="#" class="btn btn-primary">Изучить</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                {% comment %} <img src="https://via.placeholder.com/300x150" alt="Фотография как объект авторского права"> {% endcomment %}
+                <div class="card-body">
+                    <p class="card-title">Лекция 5</p>
+                    <h4 class="card-text">Название/h4>
+                    {% comment %} <a href="{% url "course1" %}" class="btn btn-primary">Записаться</a> {% endcomment %}
+                </div>
+                <a href="#" class="btn btn-primary">Изучить</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                {% comment %} <img src="https://via.placeholder.com/300x150" alt="Фотография как объект авторского права"> {% endcomment %}
+                <div class="card-body">
+                    <p class="card-title">Лекция 6</p>
+                    <h4 class="card-text">Название</h4>
+                    {% comment %} <a href="{% url "course1" %}" class="btn btn-primary">Записаться</a> {% endcomment %}
+                </div>
+                <a href="#" class="btn btn-primary">Изучить</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="test-button">
+    <a href="#" class="btn btn-primary btn-lg">Пройти тест по курсу</a>
+</div>
+
+
+{% endblock %}
