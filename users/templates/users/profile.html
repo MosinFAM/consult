@@ -1,9 +1,12 @@
 {% extends "main/base.html" %}
+
+
+{% comment %} 
 {% load crispy_forms_tags %}
 {% block content %}
     <div class="content-section">
         <div class="media">
-            {% comment %} <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">  {% endcomment %}
+             <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">  
             <div class="media-body">
                 <h2 class="account-heading">{{ user.username }}</h2>
                 <p class="text-secondary">{{ user.email }}</p>
@@ -14,11 +17,32 @@
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4">Информация пользователя</legend>
                 {{ u_form|crispy }}
-                {% comment %} {{ p_form|crispy }} {% endcomment %}
+                 {{ p_form|crispy }}
             </fieldset>
             <div class="form-group">
                 <button class="btn btn-outline-info" type="submit">Обновить</button>
             </div>
         </form>
     </div>
-{% endblock content %}
+{% endblock content %} {% endcomment %}
+
+
+
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<h2>{{ user.username }}'s Profile</h2>
+
+<h3>Your Courses</h3>
+<ul>
+    {% for course in user.course_set.all %}
+        <li>
+            <a href="{% url 'course_detail' course.id %}">{{ course.title }}</a>
+        </li>
+    {% empty %}
+        <p>You have not created any courses.</p>
+    {% endfor %}
+</ul>
+
+{% endblock %}

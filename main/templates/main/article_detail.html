@@ -1,0 +1,22 @@
+{% extends "main/base.html" %}
+
+
+<head>
+{% block title %}Article Detail{% endblock %}
+<style>
+.text-margin {
+    margin-left: 15px;
+    margin-right: 15px;
+}
+</style>
+</head>
+
+{% block content %}
+
+<div class="text-margin">
+<h2>{{ article.title }}</h2>
+<p>{{ article.content|safe  }}</p>
+<a href="{% url 'course_detail' article.course.id %}" class="btn btn-primary" style="margin-bottom: 20px;">Вернуться к курсу</a>
+</div>
+
+{% endblock %}

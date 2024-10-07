@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users',
     'main',
-    'crispy_forms', 
+    'crispy_forms',
     'crispy_bootstrap4',
 ]
 
@@ -134,3 +134,6 @@ LOGIN_REDIRECT_URL = 'home'
 LOGIN_URL = "login"
 
 LOGOUT_REDIRECT_URL = 'home'
+
+
+# AUTH_USER_MODEL = 'users.User'
