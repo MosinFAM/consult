@@ -79,3 +79,21 @@ def profile(request):
     }
 
     return render(request, 'users/profile.html', context)
+
+
+# @login_required
+# def profile(request):
+#     try:
+#         profile = request.user.profile
+#     except Profile.DoesNotExist:
+#         profile = Profile.objects.create(user=request.user)
+    
+#     # created_courses = profile.user.course_set.all() if profile.is_author else None
+#     enrolled_courses = profile.user.enrolled_courses.all()
+
+#     context = {
+#         # 'created_courses': created_courses,
+#         'enrolled_courses': enrolled_courses,
+#     }
+#     return render(request, 'users/profile.html', context)
+
