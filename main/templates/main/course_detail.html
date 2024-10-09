@@ -1,26 +1,27 @@
 {% extends "main/base.html" %}
 
-{% block title %}Course Detail{% endblock %}
-
 {% block content %}
 <h2>{{ course.title }}</h2>
 <p>{{ course.description }}</p>
 
-<h3>Содержание курса</h3>
-<ul>
-    {% for article in course.article_set.all %}
-        <li>
-            <a href="{% url 'article_detail' course.id article.id %}">{{ article.title }}</a>
+{% if is_enrolled %}
 
-            {% if article.tests.exists %}
-                <div style="margin-left: 20px;">
-                    <a href="{% url 'test_detail' course.id article.id article.tests.first.id %}">Тест</a>
-                </div>
-            {% endif %}
-        </li>
-    {% empty %}
-        <p>Нет статей в курсе.</p>
-    {% endfor %}
-</ul>
+    <h3>Содержание курса:</h3>
+    <ul>
+        {% for article in course.article_set.all %}
+            <li><a href="{% url 'article_detail' course.id article.id %}">{{ article.title }}</a></li>
+        {% endfor %}
+    </ul>
 
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" name="unenroll" class="btn btn-danger">Покинуть курс</button>
+    </form>
+
+{% else %}
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" name="enroll" class="btn btn-primary">Записаться на курс</button>
+    </form>
+{% endif %}
 {% endblock %}
