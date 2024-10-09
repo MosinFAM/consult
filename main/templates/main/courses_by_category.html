@@ -1,0 +1,27 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+    <h2>Курсы в категории: {{ category.name }}</h2>
+    
+    {% if message %}
+        <p>{{ message }}</p>
+    {% else %}
+        <div class="row">
+            {% for course in courses %}
+                <div class="col-md-4">
+                    <div class="card" style="height: 350px; width: 350px">
+                        <img src="{% if course.image_url %}{{ course.image_url }}{% else %}https://via.placeholder.com/300x200{% endif %}" 
+                             class="card-img-top img-fluid" 
+                             alt="{{ course.title }}" 
+                             style="max-width: 150px; height: auto; margin: auto;">
+                        <div class="card-body d-flex flex-column justify-content-between">
+                            <h5 class="card-title">{{ course.title }}</h5>
+                            <p class="card-text"><small class="text-muted">Создано: {{ course.created_at|date:"d M Y" }}</small></p>
+                            <a href="{% url 'course_detail' course.id %}" class="btn btn-primary mt-2">Подробнее</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}

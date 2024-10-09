@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .forms import UserRegisterForm, UserUpdateForm
+from .forms import UserRegisterForm, ProfileUpdateForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
-from .models import Profile
-
+from .models import Profile, Enrollment
+from main.models import Course
 
 def register(request):
     if request.method == 'POST':
@@ -27,73 +27,37 @@ def logout_view(request):
     return render(request, 'users/logout.html')
 
 
-# @login_required
-# def profile(request):
-#     if request.method == 'POST':
-#         u_form = UserUpdateForm(request.POST, instance=request.user)
-#         p_form = ProfileUpdateForm(request.POST, 
-#                                    request.FILES, 
-#                                    instance=request.user.profile)
-#         if u_form.is_valid() and p_form.is_valid():
-#             u_form.save()
-#             p_form.save()
-#             messages.success(request, f'Account has been updated!')
-#             return redirect('profile')
-
-#     else:
-#         u_form = UserUpdateForm(instance=request.user)
-#         p_form = ProfileUpdateForm(instance=request.user.profile)
-
-#     context = {
-#         'u_form': u_form,
-#         'p_form': p_form
-#     }
-
-#     return render(request, 'users/profile.html', context)
-
 @login_required
 def profile(request):
+
+    enrollments = Enrollment.objects.filter(user=request.user)
+    courses = [enrollment.course for enrollment in enrollments]
+
+    context = {
+        'u_form': ProfileUpdateForm(instance=request.user),
+        'courses': courses,
+    }
+    return render(request, 'users/profile.html', context)
+
+@login_required
+def edit_profile(request):
     try:
         profile = request.user.profile
     except Profile.DoesNotExist:
         profile = Profile.objects.create(user=request.user)
 
     if request.method == 'POST':
-        u_form = UserUpdateForm(request.POST, instance=request.user)
-        # p_form = ProfileUpdateForm(request.POST, request.FILES, instance=profile)
+        u_form = ProfileUpdateForm(request.POST, instance=request.user)
 
-        if u_form.is_valid(): 
-        # and p_form.is_valid():
+        if u_form.is_valid():
             u_form.save()
-            # p_form.save()
             messages.success(request, 'Account has been updated!')
             return redirect('profile')
-
     else:
-        u_form = UserUpdateForm(instance=request.user)
-        # p_form = ProfileUpdateForm(instance=profile)
+        u_form = ProfileUpdateForm(instance=request.user)
 
     context = {
         'u_form': u_form,
-        # 'p_form': p_form
     }
 
-    return render(request, 'users/profile.html', context)
-
-
-# @login_required
-# def profile(request):
-#     try:
-#         profile = request.user.profile
-#     except Profile.DoesNotExist:
-#         profile = Profile.objects.create(user=request.user)
-    
-#     # created_courses = profile.user.course_set.all() if profile.is_author else None
-#     enrolled_courses = profile.user.enrolled_courses.all()
-
-#     context = {
-#         # 'created_courses': created_courses,
-#         'enrolled_courses': enrolled_courses,
-#     }
-#     return render(request, 'users/profile.html', context)
-
+    return render(request, 'users/edit_profile.html', context)

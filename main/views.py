@@ -1,6 +1,8 @@
-from django.shortcuts import render, get_object_or_404
-from django.views import View
-from main.models import Course, Article, Test, FinalTest
+from django.shortcuts import render, get_object_or_404, redirect
+from main.models import Course, Article, Category
+from users.models import Enrollment
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 # Главная страница
 def home(request):
@@ -12,16 +14,33 @@ def about(request):
     return render(request, 'main/about.html', {'title': 'About Us'})
 
 
-# Список курсов
-def course_list(request):
-    courses = Course.objects.all()
-    return render(request, 'main/course_list.html', {'courses': courses})
-
-
 # Детали курса
 def course_detail(request, course_id):
     course = get_object_or_404(Course, id=course_id)
     return render(request, 'main/course_detail.html', {'course': course})
+
+
+
+# Детализация курса с логикой регистрации на курс
+@login_required
+def course_detail(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+    is_enrolled = Enrollment.objects.filter(user=request.user, course=course).exists()
+
+    if request.method == 'POST':
+        if 'enroll' in request.POST:
+            Enrollment.objects.create(user=request.user, course=course)
+            messages.success(request, f'Вы успешно записались на курс {course.title}')
+        elif 'unenroll' in request.POST:
+            Enrollment.objects.filter(user=request.user, course=course).delete()
+            messages.success(request, f'Вы покинули курс {course.title}')
+        return redirect('course_detail', course_id=course_id)
+
+    context = {
+        'course': course,
+        'is_enrolled': is_enrolled
+    }
+    return render(request, 'main/course_detail.html', context)
 
 
 # Детали статьи
@@ -30,41 +49,18 @@ def article_detail(request, course_id, article_id):
     return render(request, 'main/article_detail.html', {'article': article})
 
 
-# Детали теста
-def test_detail(request, course_id, article_id, test_id):
-    course = get_object_or_404(Course, id=course_id)
-    article = get_object_or_404(Article, id=article_id, course=course)
-    test = get_object_or_404(Test, id=test_id, article=article)
-    
-    # Получаем все вопросы для этого теста
-    questions = test.questions.all()
-
-    return render(request, 'main/test_detail.html', {
-        'course': course,
-        'article': article,
-        'test': test,
-        'questions': questions
-    })
+#Список категорий
+def category_list(request):
+    categories = Category.objects.all()
+    return render(request, 'main/category_list.html', {'categories': categories})
 
 
-# Прохождение теста
-class TestPassView(View):
-    def post(self, request, course_id, article_id, test_id):
-        test = get_object_or_404(Test, id=test_id, article_id=article_id)
-        # Логика прохождения теста
-        return render(request, 'main/test_result.html', {'test': test})
-
-
-# Детали финального теста
-class FinalTestDetailView(View):
-    def get(self, request, course_id, test_id):
-        final_test = get_object_or_404(FinalTest, id=test_id, course_id=course_id)
-        return render(request, 'main/final_test_detail.html', {'final_test': final_test})
-
-
-# Прохождение финального теста
-class FinalTestPassView(View):
-    def post(self, request, course_id, test_id):
-        final_test = get_object_or_404(FinalTest, id=test_id, course_id=course_id)
-        # Логика прохождения финального теста
-        return render(request, 'main/final_test_result.html', {'final_test': final_test})
+# Отображение курсов по категории
+def courses_by_category(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
+    courses = Course.objects.filter(category=category)
+    if not courses:
+        message = "Курсов в этой категории пока нет."
+    else:
+        message = None
+    return render(request, 'main/courses_by_category.html', {'category': category, 'courses': courses, 'message': message})
