@@ -7,6 +7,7 @@
 
 <ul>
     {% for question in questions %}
+    <li>2222Нет вариантов ответа.</li>
         <li>
             <strong>{{ question.text }}</strong>
             <ul>
@@ -22,6 +23,6 @@
     {% endfor %}
 </ul>
 
-<a href="{% url 'course_detail' course.id %}">Назад к курсу</a>
+<a href="{% url 'course_detail' test.article.course.id %}">Назад к курсу</a>
 
 {% endblock %}

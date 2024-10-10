@@ -1,0 +1,108 @@
+[
+    
+    {
+        "model": "main.Category", 
+        "pk": 1,
+        "fields": {
+          "name" : "Авторское право"
+        }
+      },
+    {
+        "model": "main.Course", 
+        "pk": 1,
+        "fields": {
+          "author" : 1 ,
+          "category" : 1,
+          "title" : "Авторское право на фотографии" ,
+          "description" : "Описание курса \"Авторское право на фотографии\"" , 
+          "created_at" : "2024-10-08 12:00" ,
+          "updated_at" : "2024-10-08 14:25",
+          "image_url" : "https://static.tildacdn.com/tild3936-3662-4535-b431-383238393464/12.jpg"
+        }
+      },
+      {
+        "model": "main.Article",
+        "pk": 1, 
+        "fields": {
+          "course": 1,
+          "title": "Фотография как объект авторского права",
+          "content": ""
+        }
+      },
+      {
+        "model": "tests.Test",
+        "pk": 1,
+        "fields": {
+          "article": 1,
+          "title": "Тест Фотография как объект авторского права"   
+        }
+      },
+      {
+        "model": "main.Question",
+        "pk": 1,
+        "fields": {
+          "test": 1,
+          "text": "_______ право – это раздел права, регулирующий отношения, связанные с творческой деятельностью человека.",
+          "question_type": "OPEN",
+          "correct_answer": "Авторское"
+        }
+      },
+      {
+        "model": "main.Article",
+        "pk": 2, 
+        "fields": {
+          "course": 1,
+          "title": "Права фотографа",
+          "content": ""
+        }
+      },
+      {
+        "model": "main.Article",
+        "pk": 3, 
+        "fields": {
+          "course": 1,
+          "title": "Ограничения прав на публикацию фото",
+          "content": ""
+        }
+      },
+      {
+        "model": "main.Article",
+        "pk": 4, 
+        "fields": {
+          "course": 1,
+          "title": "Ограничения авторских прав на фотографию",
+          "content": ""
+        }
+      },
+      {
+        "model": "main.Article",
+        "pk": 5, 
+        "fields": {
+          "course": 1,
+          "title": "Распоряжение авторским правом на фотографию",
+          "content": ""
+        }
+      },
+      {
+        "model": "main.Article",
+        "pk": 6, 
+        "fields": {
+          "course": 1,
+          "title": "Защита авторских прав на фотографию",
+          "content": ""
+        }
+      },
+      {
+        "model": "main.Course", 
+        "pk": 2,
+        "fields": {
+          "author" : 1 ,
+          "category" : 1,
+          "title" : "Компьютерное пиратство" ,
+          "description" : "Описание курса \"Компьютерное пиратство\"" , 
+          "created_at" : "2024-10-09 08:00" ,
+          "updated_at" : "2024-10-09 18:00",
+          "image_url" : "https://static.tildacdn.com/tild3936-3662-4535-b431-383238393464/12.jpg"
+        }
+      }
+]

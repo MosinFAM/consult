@@ -5,7 +5,7 @@ from main.models import Article, Course
 
 # Тест для статьи
 class Test(models.Model):
-    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='tests')
+    article = models.OneToOneField(Article, on_delete=models.CASCADE, related_name='tests')
     title = models.CharField(max_length=255)
 
     def __str__(self):
@@ -29,7 +29,7 @@ class Question(models.Model):
     test = models.ForeignKey(Test, on_delete=models.CASCADE, related_name='questions')
     text = models.TextField()
     question_type = models.CharField(max_length=10, choices=QUESTION_TYPES, default=CHOICE)  # Тип вопроса
-
+    correct_answer = models.TextField()
     def __str__(self):
         return f'{self.text}'
 
@@ -43,7 +43,7 @@ class Answer(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE, limit_choices_to={'question_type': 'choice'})
     text = models.CharField(max_length=255)
     is_correct = models.BooleanField(default=False)
-
+    
     def __str__(self):
         return self.text
 
@@ -109,3 +109,12 @@ class FinalTestResult(models.Model):
     class Meta:
         verbose_name = 'Результат финального теста'
         verbose_name_plural = 'Результаты финальных тестов'
+
+# Модель для связи  теста и курса
+class Enrollment(models.Model):
+    tests = models.ForeignKey(Test, on_delete=models.CASCADE)
+    article = models.ForeignKey(Article, on_delete=models.CASCADE)
+    enrolled_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.tests.title} тест от  {self.article.title}"

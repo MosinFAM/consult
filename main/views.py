@@ -1,8 +1,10 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from main.models import Course, Article, Category
+from tests.models import Enrollment, Test
 from users.models import Enrollment
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+
 
 # Главная страница
 def home(request):
@@ -25,7 +27,9 @@ def course_detail(request, course_id):
 @login_required
 def course_detail(request, course_id):
     course = get_object_or_404(Course, id=course_id)
+    article = get_object_or_404(Article, id=course_id)
     is_enrolled = Enrollment.objects.filter(user=request.user, course=course).exists()
+    tests = Test.objects.filter(article=article) 
 
     if request.method == 'POST':
         if 'enroll' in request.POST:
@@ -38,15 +42,17 @@ def course_detail(request, course_id):
 
     context = {
         'course': course,
-        'is_enrolled': is_enrolled
-    }
+        'is_enrolled': is_enrolled, 
+        'tests': tests
+    }   
     return render(request, 'main/course_detail.html', context)
 
 
 # Детали статьи
 def article_detail(request, course_id, article_id):
     article = get_object_or_404(Article, id=article_id, course_id=course_id)
-    return render(request, 'main/article_detail.html', {'article': article})
+    tests = Test.objects.filter(article=article) 
+    return render(request, 'main/article_detail.html', {'article': article, 'tests': tests})
 
 
 #Список категорий
@@ -64,3 +70,7 @@ def courses_by_category(request, category_id):
     else:
         message = None
     return render(request, 'main/courses_by_category.html', {'category': category, 'courses': courses, 'message': message})
+
+# def test_detail(request, course_id, article_id, test_id):
+#     test = get_object_or_404(Test, id=test_id, article_id=article_id, course_id=course_id)
+#     return render(request, 'main/test_detail.html', {'test': test})

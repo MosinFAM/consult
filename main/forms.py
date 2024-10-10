@@ -30,3 +30,8 @@ class FinalTestForm(forms.ModelForm):
     class Meta:
         model = FinalTest
         fields = ['questions']
+
+# class Test(forms.ModelForm):
+#     class Meta:
+#         model = Test
+#         fields = ['article', 'title']
