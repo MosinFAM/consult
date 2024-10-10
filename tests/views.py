@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.views import View
 from main.models import Course, Article
-from .models import Test, FinalTest, Enrollment
+from .models import Test, Answer, FinalTest, Enrollment
 # Create your views here.
 
 # Детали теста
@@ -11,21 +11,11 @@ from .models import Test, FinalTest, Enrollment
 #     test = get_object_or_404(Test, id=test_id, article=article)
 
 def test_detail(request, course_id, article_id, test_id):
-    # test = get_object_or_404(Test, id=article_id, course_id=course_id)
-    # enrollments = Enrollment.objects.filter(article=request.article)
-    # context = {
-    #     'article': article,
-    #     'test': test
-    #     # Добавляем другие переменные, которые могут понадобиться в шаблоне
-    # }
-
-    # # Возвращаем страницу с деталями статьи
-    # return render(request, 'main/test_detail.html', context)
-    
-    test = Test.objects.get(id=article_id)
+    # test = Test.objects.get(id=article_id)
+    test = get_object_or_404(Test, id=article_id)
     course = Test.objects.filter(id=course_id) 
     # article = get_object_or_404(Article, id=article_id, course=course)
-    questions = test.questions.all()
+    questions = test.questions.all().prefetch_related('answers')
 
     context = {
         'course': course,
@@ -34,21 +24,7 @@ def test_detail(request, course_id, article_id, test_id):
         'questions': questions
     }
     return render(request, 'tests/test_detail.html', context)
-    course = get_object_or_404(Course, id=course_id)
-    article = get_object_or_404(Article, id=article_id, course=course)
-    test = get_object_or_404(Test, id=test_id, article=article)
-
-    '''
-    # Получаем все вопросы для этого теста
-    questions = test.questions.all()
-
-    return render(request, 'tests/test_detail.html', {
-        'course': course,
-        'article': article,
-        'test': test,
-        'questions': questions
-    })
-'''
+    
 
 # Прохождение теста
 class TestPassView(View):

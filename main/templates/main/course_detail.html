@@ -29,12 +29,12 @@
 
 
 {% block content %}
-<h2>{{ course.title }}</h2>
-<p>{{ course.description }}</p>
+<h2 class="text-margin pr-8">{{ course.title }}</h2>
+<p class="text-margin pr-6">{{ course.description }}</p>
 
 {% if is_enrolled %}
 
-    <h3>Содержание курса:</h3>
+    <h3 class="text-margin pr-8">Содержание курса:</h3>
     <ul>
         {% for article in course.article_set.all %}
             <li>
@@ -54,7 +54,7 @@
 
     <form method="POST">
         {% csrf_token %}
-        <button type="submit" name="unenroll" class="btn btn-danger">Покинуть курс</button>
+        <button type="submit" name="unenroll" class="btn btn-danger m-3">Покинуть курс</button>
     </form>
 
 {% else %}

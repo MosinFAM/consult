@@ -1,18 +1,20 @@
 {% extends "main/base.html" %}
 
+
+
 {% block title %}Тесты для {{ article.title }}{% endblock %}
 
 {% block content %}
 <h2>Тест для статьи: {{ article.title }}</h2>
 
-<ul>
+<ol>
     {% for question in questions %}
-    <li>2222Нет вариантов ответа.</li>
         <li>
-            <strong>{{ question.text }}</strong>
-            <ul>
-                {% for answer in question.answer_set.all %}
-                    <li>{{ answer.text }}</li>
+            <strong>{{ question.text_description }}</strong> </br>
+            <p>{{ question.text_task }}</p>
+            <ul start='1'>
+                {% for answer in question.answers.all %}
+                    <li id="selectable">{{ answer.text }}</li>
                 {% empty %}
                     <li>Нет вариантов ответа.</li>
                 {% endfor %}
@@ -21,7 +23,7 @@
     {% empty %}
         <p>Нет вопросов для этого теста.</p>
     {% endfor %}
-</ul>
+    </ol>
 
 <a href="{% url 'course_detail' test.article.course.id %}">Назад к курсу</a>
 
