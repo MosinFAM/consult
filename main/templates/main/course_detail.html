@@ -30,7 +30,7 @@
 
 {% block content %}
 <h2 class="text-margin pr-8">{{ course.title }}</h2>
-<p class="text-margin pr-6">{{ course.description }}</p>
+{% comment %} <p class="text-margin pr-6">{{ course.description }}</p> {% endcomment %}
 
 {% if is_enrolled %}
 

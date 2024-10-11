@@ -46,7 +46,7 @@ class Question(models.Model):
     question_type = models.CharField(max_length=17, choices=[('multiple_choice', 'Multiple Choice'), ('text', 'Text')])
     
     def __str__(self):
-        return f'{self.text}'
+        return f'{self.text_task}'
 
     class Meta:
         verbose_name = 'Вопрос'

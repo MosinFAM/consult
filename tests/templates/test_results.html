@@ -1,0 +1,23 @@
+<!-- templates/tests/test_results.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Результаты Теста: {{ test.title }}</h2>
+    {% if result %}
+        <p>Ваш балл: {{ result.score }} из {{ test.questions.count }}</p>
+        {% if result.passed %}
+            <div class="alert alert-success" role="alert">
+                Поздравляем! Вы прошли тест.
+            </div>
+        {% else %}
+            <div class="alert alert-danger" role="alert">
+                К сожалению, вы не прошли тест. Попробуйте ещё раз.
+            </div>
+        {% endif %}
+    {% else %}
+        <p>Нет данных о результатах теста.</p>
+    {% endif %}
+    <a href="{% url 'course_detail' course.id %}" class="btn btn-primary">Вернуться к курсу</a>
+</div>
+{% endblock %}

@@ -13,14 +13,15 @@
 
 {% block content %}
 
-<div class="text-margin col-md-6 col-lg-4">
+<div class="text-margin">
 <h2>{{ article.title }}</h2>
-<p>{{ article.content|safe  }}</p></br>
+<p>{{ article.content|safe  }}</p>
 
 {% for test in tests %}
 
     <a href="{% url 'test_detail' article.course.id article.id test.id %}" class="btn btn-link text-decoration-none">Пройти тест</a></br>
 {%  endfor %}
+</br>
     <a href="{% url 'course_detail' article.course.id %}" class="btn btn-primary" style="margin-bottom: 20px;">Вернуться к курсу</a>
 
 </div>
