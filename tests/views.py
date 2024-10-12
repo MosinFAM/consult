@@ -1,88 +1,134 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.views import View
 from main.models import Course, Article
-from .models import Test, Question, TestResult
-from .forms import TestForm
+from users.models import Profile
+from .models import Test, Answer, TestResult, FinalTest, Enrollment
 from django.contrib.auth.decorators import login_required
+# Create your views here.
 
-@login_required
-def test_welcome(request, course_id, article_id, test_id):
-    course = get_object_or_404(Course, id=course_id)
-    article = get_object_or_404(Article, id=article_id, course=course)
-    test = get_object_or_404(Test, id=test_id, article=article)
-    question_count = test.questions.count()
+# Детали теста
+# def test_detail(request, course_id, article_id, test_id):
+#     course = get_object_or_404(Course, id=course_id)
+#     article = get_object_or_404(Article, id=article_id, course=course)
+#     test = get_object_or_404(Test, id=test_id, article=article)
 
-    return render(request, 'tests/test_welcome.html', {
+def test_detail_ok(request, course_id, article_id, test_id):
+    # test = Test.objects.get(id=article_id)
+    test = get_object_or_404(Test, id=article_id)
+    course = Test.objects.filter(id=course_id) 
+    # article = get_object_or_404(Article, id=article_id, course=course)
+    questions = test.questions.all().prefetch_related('answers')
+
+    context = {
+        'course': course,
+        # 'article': article,
+        'test': test,
+        'questions': questions
+    }
+    return render(request, 'tests/test_detail.html', context)
+
+def test_detail(request, course_id, article_id, test_id):
+    article = Test.objects.filter(id=article_id) 
+    course = Test.objects.filter(id=course_id) 
+    test = get_object_or_404(Test, id=article_id)
+    return render(request, 'main/course_detail.html', {
         'course': course,
         'article': article,
-        'test': test,
-        'question_count': question_count,
+        'test': test
     })
-
+    
 @login_required
 def test_detail(request, course_id, article_id, test_id):
+    print(f"Querying Profile with course_id={course_id}, article_id={article_id}, test_id={test_id}")
+    # course = Test.objects.filter(course=course) 
+    # article = Test.objects.filter(article=article) 
     course = get_object_or_404(Course, id=course_id)
     article = get_object_or_404(Article, id=article_id, course=course)
     test = get_object_or_404(Test, id=test_id, article=article)
+    # profile = get_object_or_404(Profile, user=request.user)
+    profile = get_object_or_404(Profile, id=course_id)
     questions = test.questions.all()
 
     if request.method == 'POST':
-        form = TestForm(request.POST, questions=questions)
-        if form.is_valid():
-            correct_answers = 0
-            total_questions = questions.count()
+        score = 0
+        total = questions.count()
+        for question in questions:
+            field_name = f'question_{question.id}'
+            user_answer = request.POST.get(field_name)
 
-            for question in questions:
-                if question.question_type == Question.SINGLE_CHOICE:
-                    selected_option = form.cleaned_data[f'question_{question.id}']
-                    correct_option = question.options.get(is_correct=True)
-                    if int(selected_option) == correct_option.id:
-                        correct_answers += 1
-                elif question.question_type == Question.MULTIPLE_CHOICE:
-                    selected_options = form.cleaned_data[f'question_{question.id}']
-                    correct_options = question.options.filter(is_correct=True)
-                    if set(map(int, selected_options)) == set(correct_options.values_list('id', flat=True)):
-                        correct_answers += 1
-                elif question.question_type == Question.TEXT_ANSWER:
-                    user_answer = form.cleaned_data[f'question_{question.id}']
-                    # Проверка текстовых ответов может быть любой (например, полное совпадение или более сложная логика)
+            if question.question_type == 'multiple_choice':
+                try:
+                    selected_answer = Answer.objects.get(id=user_answer, question=question)
+                    if selected_answer.is_correct:
+                        score += 1
+                except Answer.DoesNotExist:
+                    pass  # Неверный выбор или не выбран ответ
+            elif question.question_type == 'text':
+                correct_answer = question.answers.filter(is_correct=True).first().text.strip().lower() 
+                if user_answer == correct_answer:
+                    score += 1
 
-            score = correct_answers / total_questions
-            is_passed = correct_answers >= (total_questions - 1)
-            
-            TestResult.objects.create(user=request.user, test=test, score=score, is_passed=is_passed)
-            return redirect('test_result', course_id=course_id, article_id=article_id, test_id=test_id)
-    else:
-        form = TestForm(questions=questions)
-
-    return render(request, 'tests/test_detail.html', {
+        passed = score >= (total - 1)  # Максимум 1 ошибка
+        TestResult.objects.create(profile=profile, test=test, score=score, total_questions = total, passed=passed)
+        
+        return redirect('tests/test_detail.html', course_id=article.course.id)
+    
+    context = {
+        'course_id': course.id,
+        'article_id': article.id,
+        'test_id': test.id,
+        # other context data...
+    }
+    context2 = {
         'course': course,
         'article': article,
         'test': test,
-        'form': form,
-    })
+        'questions': questions,
+        # other context data...
+    }
+
+    return render(request, 'tests/test_detail.html', context2)
 
 @login_required
-def test_result(request, course_id, article_id, test_id):
+def test_results(request, course_id, article_id, test_id):
     course = get_object_or_404(Course, id=course_id)
     article = get_object_or_404(Article, id=article_id, course=course)
     test = get_object_or_404(Test, id=test_id, article=article)
-    result = TestResult.objects.filter(user=request.user, test=test).order_by('-id').first()
+    profile = get_object_or_404(Profile, user=request.user)
 
-    return render(request, 'tests/test_result.html', {
+    # Получаем последний результат теста пользователя
+    result = TestResult.objects.filter(profile=profile, test=test).order_by('-date_taken').first()
+
+    context = {
         'course': course,
         'article': article,
         'test': test,
         'result': result,
-    })
+    }
 
-@login_required
-def course_final_test(request, course_id):
-    course = get_object_or_404(Course, id=course_id)
-    # Логика для финального теста
-    return render(request, 'tests/course_final_test.html', {'course': course})
+    return render(request, 'tests/test_results.html', context)
 
-@login_required
-def final_test_result(request, course_id):
-    course = get_object_or_404(Course, id=course_id)
-    # Логика отображения результата финального теста
-    return render(request, 'tests/final_test_result.html', {'course': course})
+# Прохождение теста
+class TestPassView(View):
+    pass
+    # def post(self, request, course_id, article_id, test_id):
+    #     test = get_object_or_404(Test, id=test_id, article_id=article_id)
+    #     # Логика прохождения теста
+    #     return render(request, 'main/test_result.html', {'test': test})
+
+
+# Детали финального теста
+class FinalTestDetailView(View):
+    pass
+    # def get(self, request, course_id, test_id):
+    #     final_test = get_object_or_404(FinalTest, id=test_id, course_id=course_id)
+    #     return render(request, 'main/final_test_detail.html', {'final_test': final_test})
+
+
+# Прохождение финального теста
+class FinalTestPassView(View):
+    pass
+    # def post(self, request, course_id, test_id):
+    #     final_test = get_object_or_404(FinalTest, id=test_id, course_id=course_id)
+    #     # Логика прохождения финального теста
+    #     return render(request, 'main/final_test_result.html', {'final_test': final_test})

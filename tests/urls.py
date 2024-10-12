@@ -1,10 +1,18 @@
 from django.urls import path
-from tests.views import test_detail, course_final_test, test_welcome, test_result
+from tests.views import (
+    test_detail, test_results, test_detail_ok
+    #   TestPassView, FinalTestDetailView, FinalTestPassView
+)
 
 
 urlpatterns = [
-    path('<int:course_id>/<int:article_id>/<int:test_id>/welcome/', test_welcome, name='test_welcome'),
-    path('<int:course_id>/<int:article_id>/<int:test_id>/', test_detail, name='test_detail'),
-    path('<int:course_id>/<int:article_id>/<int:test_id>/result/', test_result, name='test_result'),
-    path('<int:course_id>/final/', course_final_test, name='course_final_test'),
+    path('course/<int:course_id>/article/<int:article_id>/tests/<int:test_id>/', test_detail, name='test_detail'),
+    path(
+        'tests/course/<int:course_id>/article/<int:article_id>/tests/<int:test_id>/results/',
+        test_results,
+        name='test_results'
+    ),
+#     path('course/<int:course_id>/article/<int:article_id>/tests/<int:test_id>/pass/', TestPassView.as_view(), name='test_pass'),
+#     path('course/<int:course_id>/final-test/<int:test_id>/', FinalTestDetailView.as_view(), name='final_test_detail'),
+#     path('course/<int:course_id>/final-test/<int:test_id>/pass/', FinalTestPassView.as_view(), name='final_test_pass'),
 ]
