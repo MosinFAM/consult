@@ -1,0 +1,12 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+<h2>Тест к статье: {{ article.title }}</h2>
+<p>Курс: {{ course.title }}</p>
+<p>Количество вопросов: {{ question_count }}</p>
+
+<form action="{% url 'test_detail' course.id article.id test.id %}" method="GET">
+    <button type="submit" class="btn btn-primary">Решать тест</button>
+</form>
+
+{% endblock %}

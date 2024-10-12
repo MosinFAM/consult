@@ -65,29 +65,29 @@ class Article(models.Model):
 #     class Meta:
 #         verbose_name = 'Тест'
 #         verbose_name_plural = 'Тесты'
-'''
-class Question(models.Model):
-    test = models.ForeignKey(Test, on_delete=models.CASCADE)
-    text = models.TextField()
-    question_type = models.CharField(max_length=50, choices=[('multiple_choice', 'Выбор варианта'), ('text', 'Открытый ответ')])
-    correct_answer = models.TextField(null=True, blank=True)
+# '''
+# class Question(models.Model):
+#     test = models.ForeignKey(Test, on_delete=models.CASCADE)
+#     text = models.TextField()
+#     question_type = models.CharField(max_length=50, choices=[('multiple_choice', 'Выбор варианта'), ('text', 'Открытый ответ')])
+#     correct_answer = models.TextField(null=True, blank=True)
                                       
-    def __str__(self):
-        return f"Question: {self.text} in {self.test.title}"
+#     def __str__(self):
+#         return f"Question: {self.text} in {self.test.title}"
 
-    class Meta:
-        verbose_name = 'Вопрос'
-        verbose_name_plural = 'Вопросы'
+#     class Meta:
+#         verbose_name = 'Вопрос'
+#         verbose_name_plural = 'Вопросы'
     
-class Answer(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    text = models.CharField(max_length=200)
-    is_correct = models.BooleanField(default=False)
+# class Answer(models.Model):
+#     question = models.ForeignKey(Question, on_delete=models.CASCADE)
+#     text = models.CharField(max_length=200)
+#     is_correct = models.BooleanField(default=False)
 
-    def __str__(self):
-        return self.text
+#     def __str__(self):
+#         return self.text
     
-    class Meta:
-        verbose_name = 'Ответ'
-        verbose_name_plural = 'Ответы'
-'''
+#     class Meta:
+#         verbose_name = 'Ответ'
+#         verbose_name_plural = 'Ответы'
+# '''
