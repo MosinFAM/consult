@@ -1,8 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
 from main.models import Article, Course
+from users.models import Profile
 
 
+    
 # Тест для статьи
 class Test(models.Model):
     article = models.OneToOneField(Article, on_delete=models.CASCADE, related_name='tests')
@@ -16,6 +18,18 @@ class Test(models.Model):
         verbose_name_plural = 'Тесты'
 
 
+# # Вариант ответа
+# class Answer(models.Model):
+#     text = models.CharField(max_length=255)
+#     is_correct = models.BooleanField(default=False)
+    
+#     def __str__(self):
+#         return  f'{self.text}'
+
+#     class Meta:
+#         verbose_name = 'Ответ'
+#         verbose_name_plural = 'Ответы'
+
 # Вопрос
 class Question(models.Model):
     OPEN = 'open'
@@ -27,11 +41,12 @@ class Question(models.Model):
     ]
 
     test = models.ForeignKey(Test, on_delete=models.CASCADE, related_name='questions')
-    text = models.TextField()
-    question_type = models.CharField(max_length=10, choices=QUESTION_TYPES, default=CHOICE)  # Тип вопроса
-    correct_answer = models.TextField()
+    text_description = models.TextField() #само задание
+    text_task = models.TextField() #содержание задания
+    question_type = models.CharField(max_length=17, choices=[('multiple_choice', 'Multiple Choice'), ('text', 'Text')])
+    
     def __str__(self):
-        return f'{self.text}'
+        return f'{self.text_task}'
 
     class Meta:
         verbose_name = 'Вопрос'
@@ -40,17 +55,16 @@ class Question(models.Model):
 
 # Вариант ответа
 class Answer(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE, limit_choices_to={'question_type': 'choice'})
+    question = models.ForeignKey(Question, related_name='answers', on_delete=models.CASCADE)
     text = models.CharField(max_length=255)
     is_correct = models.BooleanField(default=False)
     
     def __str__(self):
-        return self.text
+        return  f'{self.text}'
 
     class Meta:
         verbose_name = 'Ответ'
         verbose_name_plural = 'Ответы'
-
 
 # Открытые ответы пользователя (для вопросов с открытым ответом)
 class OpenAnswer(models.Model):
@@ -66,20 +80,20 @@ class OpenAnswer(models.Model):
         verbose_name_plural = 'Открытые ответы'
 
 
-# Результаты теста пользователя
-class TestResult(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    test = models.ForeignKey(Test, on_delete=models.CASCADE)
-    passed = models.BooleanField(default=False)
-    score = models.FloatField(default=0.0)
-    attempt_count = models.PositiveIntegerField(default=0)
+# # Результаты теста пользователя
+# class TestResult(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+#     test = models.ForeignKey(Test, on_delete=models.CASCADE)
+#     passed = models.BooleanField(default=False)
+#     score = models.FloatField(default=0.0)
+#     attempt_count = models.PositiveIntegerField(default=0)
 
-    def __str__(self):
-        return f'{self.user.username} - {self.test.title} - {"Passed" if self.passed else "Failed"}'
+#     def __str__(self):
+#         return f'{self.user.username} - {self.test.title} - {"Passed" if self.passed else "Failed"}'
 
-    class Meta:
-        verbose_name = 'Результат теста'
-        verbose_name_plural = 'Результаты тестов'
+#     class Meta:
+#         verbose_name = 'Результат теста'
+#         verbose_name_plural = 'Результаты тестов'
 
 
 # Финальный тест по курсу
@@ -109,6 +123,20 @@ class FinalTestResult(models.Model):
     class Meta:
         verbose_name = 'Результат финального теста'
         verbose_name_plural = 'Результаты финальных тестов'
+
+class TestResult(models.Model):
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    test = models.ForeignKey(Test, on_delete=models.CASCADE)
+    score = models.IntegerField()  # Количество правильных ответов
+    total_questions = models.IntegerField()  # Общее количество вопросов
+    passed = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.profile.user.username} - {self.test.title}"
+
+    class Meta:
+        verbose_name = 'Результат теста'
+        verbose_name_plural = 'Результаты тестов'
 
 # Модель для связи  теста и курса
 class Enrollment(models.Model):

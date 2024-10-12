@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from main.models import Course, Article, Category
-from tests.models import Enrollment, Test
+from tests.models import Enrollment, Test, Question
 from users.models import Enrollment
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required

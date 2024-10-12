@@ -1,27 +1,79 @@
 {% extends "main/base.html" %}
 
+
+
 {% block title %}Тесты для {{ article.title }}{% endblock %}
 
 {% block content %}
 <h2>Тест для статьи: {{ article.title }}</h2>
 
-<ul>
+{% comment %} <ol>
     {% for question in questions %}
-    <li>2222Нет вариантов ответа.</li>
         <li>
-            <strong>{{ question.text }}</strong>
-            <ul>
-                {% for answer in question.answer_set.all %}
-                    <li>{{ answer.text }}</li>
+            <strong>{{ question.text_description }}</strong> </br>
+            <p>{{ question.text_task }}</p>
+            <ul start='1'>
+                {% for answer in question.answers.all %}
+                    <li id="selectable">{{ answer.text }}</li>
                 {% empty %}
-                    <li>Нет вариантов ответа.</li>
+                    <p>Введите ваш ответ:</p>
                 {% endfor %}
             </ul>
         </li>
     {% empty %}
         <p>Нет вопросов для этого теста.</p>
     {% endfor %}
-</ul>
+    </ol> {% endcomment %}
+    <!-- templates/course_detail.html -->
+
+    <form method="post" action="{% url 'test_detail' course_id=course.id article_id=article.id test_id=test.id %}">
+        {% csrf_token %}
+        <ol>
+            {% for question in questions %}
+                <li class="mb-4">
+                    <!-- Описание вопроса -->
+                    <strong>{{ question.text_description }}</strong><br>
+                    <p>{{ question.text_task }}</p>
+                    
+                    <!-- Проверяем тип вопроса -->
+                    {% if question.question_type == 'multiple_choice' %}
+                        <!-- Вопрос с выбором ответа (радиокнопки) -->
+                        <div class="list-group">
+                            {% for answer in question.answers.all %}
+                                <div class="form-check">
+                                    <input class="form-check-input" 
+                                           type="checkbox" 
+                                           name="question_{{ question.id }}" 
+                                           id="question_{{ question.id }}_answer_{{ answer.id }}" 
+                                           value="{{ answer.id }}">
+                                    <label class="form-check-label" for="question_{{ question.id }}_answer_{{ answer.id }}">
+                                        {{ answer.text }}
+                                    </label>
+                                </div>
+                            {% empty %}
+                                <p>Нет доступных вариантов ответов.</p>
+                            {% endfor %}
+                        </div>
+                    {% elif question.question_type == 'text' %}
+                        <!-- Вопрос с текстовым ответом -->
+                        <div class="mb-3">
+                            <label for="question_{{ question.id }}" class="form-label">Ваш ответ:</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="question_{{ question.id }}" 
+                                   name="question_{{ question.id }}" 
+                                   placeholder="Введите ваш ответ" 
+                                   required>
+                        </div>
+                    {% endif %}
+                </li>
+            {% empty %}
+                <p>Нет вопросов для этого теста.</p>
+            {% endfor %}
+        </ol>
+        <button type="submit" class="btn btn-primary">Отправить ответы</button>
+    </form>
+
 
 <a href="{% url 'course_detail' test.article.course.id %}">Назад к курсу</a>
 
