@@ -1,0 +1,12 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+<h2>Финальный тест курса: {{ course.title }}</h2>
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">Начать финальный тест</button>
+</form>
+
+{% endblock %}

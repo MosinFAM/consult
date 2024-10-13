@@ -1,0 +1,10 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+<h2>Результат теста</h2>
+<p>Вы правильно ответили на {{ result.score|floatformat:2 }}% вопросов.</p>
+
+<a href="{% url 'course_detail' course.id %}" class="btn btn-primary">Вернуться к курсу</a>
+<a href="{% url 'test_detail' course.id article.id test.id %}" class="btn btn-secondary">Пройти тест заново</a>
+
+{% endblock %}
