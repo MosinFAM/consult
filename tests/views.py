@@ -2,15 +2,10 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from main.models import Course, Article
 from users.models import Profile
-from .models import Test, Answer, TestResult, FinalTest, Enrollment
+from .models import Test, Answer, TestResult, FinalTest
+from users.models import Enrollment
 from django.contrib.auth.decorators import login_required
-# Create your views here.
 
-# Детали теста
-# def test_detail(request, course_id, article_id, test_id):
-#     course = get_object_or_404(Course, id=course_id)
-#     article = get_object_or_404(Article, id=article_id, course=course)
-#     test = get_object_or_404(Test, id=test_id, article=article)
 
 def test_detail_ok(request, course_id, article_id, test_id):
     # test = Test.objects.get(id=article_id)
