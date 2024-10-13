@@ -73,3 +73,7 @@ sudo lsof -t -i tcp:8000 | xargs kill -9
 
 Основные команды представлены здесь - https://www.reg.ru/blog/shpargalka-po-python-dlya-django/
 Думаю, двух приложений: users и main (во втором будет основная логика работы с курсами) нам достаточно.
+
+
+
+python manage.py loaddata data.json

@@ -1,260 +1,259 @@
 [
-    
-      {
-        "model": "tests.Test",
-        "pk": 1,
-        "fields": {
-          "article": 1,
-          "title": "Тест Фотография как объект авторского права"   
-        }
-      },
-      {
-        "model": "tests.Question",
-        "pk": 1,
-        "fields": {
-          "test": 1,
-          "text_description": "Впишите недостающее слово:",
-          "text_task": "_______ право – это раздел права, регулирующий отношения, связанные с творческой деятельностью человека.",
-          "question_type": "text"
-        }
-      },
-      {
-        "model": "tests.Answer",
-        "pk": 1,
-        "fields": {
-          "question": 1,
-          "text": "Авторское",
-          "is_correct": true
-        }
-      },
-      {
-        "model": "tests.Question",
-        "pk": 2,
-        "fields": {
-          "test": 1,
-          "text_description": "Выберите правильный вариант ответа (или несколько вариантов ответа):",
-          "text_task": "Какие объекты не охраняются авторским правом?",
-          "question_type": "multiple_choice"
-        }
-      },
-      {
-        "model": "tests.Answer",
-        "pk": 1,
-        "fields": {
-          "question": 2,
-          "text": "Фотографии",
-          "is_correct": false
-        }
-      },
-      {
-        "model": "tests.Answer",
-        "pk": 2,
-        "fields": {
-          "question": 2,
-          "text": "Изобретения",
-          "is_correct": true
-        }
-      },
-      {
-        "model": "tests.Answer",
-        "pk": 3,
-        "fields": {
-          "question": 2,
-          "text": "Товарные знаки",
-          "is_correct": true
-        }
-      },
-      {
-        "model": "tests.Answer",
-        "pk": 4,
-        "fields": {
-          "question": 2,
-          "text": "Фильмы",
-          "is_correct": false
-        }
-      },
-      {
-        "model": "tests.Answer",
-        "pk": 5,
-        "fields": {
-          "question": 2,
-          "text": "Литературные произведения",
-          "is_correct": false
-        }
-      },
-      {
-        "model": "tests.Question",
-        "pk": 3,
-        "fields": {
-          "test": 1,
-          "text_description": "Выберите правильный вариант ответа (или несколько вариантов ответа):",
-          "text_task": "Что необходимо для возникновения авторских прав на фотографию?",
-          "question_type": "multiple_choice"
-        }
-      },
-      {
-        "model": "tests.Answer",
-        "pk": 1,
-        "fields": {
-          "question": 3,
-          "text": "Прохождение формальных регистрационных процедур",
-          "is_correct": false
-        }
-      },
-      {
-        "model": "tests.Answer",
-        "pk": 2,
-        "fields": {
-          "question": 3,
-          "text": "Творческий характер фотографии",
-          "is_correct": true
-        }
-      },
-      {
-        "model": "tests.Answer",
-        "pk": 3,
-        "fields": {
-          "question": 3,
-          "text": "Особое назначение фотоснимка",
-          "is_correct": false
-        }
-      },
-      {
-        "model": "tests.Answer",
-        "pk": 4,
-        "fields": {
-          "question": 3,
-          "text": "Объективное выражение фотоснимка",
-          "is_correct": true
-        }
-      },
-      {
-        "model": "tests.Question",
-        "pk": 4,
-        "fields": {
-          "test": 1,
-          "text_description": "Выберите правильный вариант ответа (или несколько вариантов ответа):",
-          "text_task": "Охраняются ли авторским правом фото созданные только для объективной и достоверной фиксации информации об объекте съемки при отсутствии творческого вклада фотографа?",
-          "question_type": "multiple_choice"
-        }
-      },
-      {
-        "model": "tests.Answer",
-        "pk": 1,
-        "fields": {
-          "question": 4,
-          "text": "Да",
-          "is_correct": false
-        }
-      },
-      {
-        "model": "tests.Answer",
-        "pk": 4,
-        "fields": {
-          "question": 2,
-          "text": "Нет",
-          "is_correct": true
-        }
-      },
-      {
-        "model": "tests.Question",
-        "pk": 5,
-        "fields": {
-          "test": 1,
-          "text_description": "Выберите правильный вариант ответа (или несколько вариантов ответа):",
-          "text_task": "У кого первоначально возникают авторские права на фотографию?",
-          "question_type": "multiple_choice"
-        }
-      },
-      {
-        "model": "tests.Answer",
-        "pk": 1,
-        "fields": {
-          "question": 5,
-          "text": "У фотографа",
-          "is_correct": true
-        }
-      },
-      {
-        "model": "tests.Answer",
-        "pk": 2,
-        "fields": {
-          "question": 5,
-          "text": "У государства",
-          "is_correct": false
-        }
-      },
-      {
-        "model": "tests.Answer",
-        "pk": 3,
-        "fields": {
-          "question": 5,
-          "text": "У работодателя фотографа",
-          "is_correct": false
-        }
-      },
-      {
-        "model": "tests.Answer",
-        "pk": 4,
-        "fields": {
-          "question": 5,
-          "text": "У заказчика фотографа",
-          "is_correct": false
-        }
-      },
-      {
-        "model": "tests.Question",
-        "pk": 6,
-        "fields": {
-          "test": 1,
-          "text_description": "Решите задачу",
-          "text_task": "Иванов сделал ряд фотографий озера Байкал. Петров предоставил Иванову камеру, Сидоров оплатил Иванову билеты до озера, Смирнов помогал Иванову выбирать экспозицию и настраивал резкость кадра. Кто из них является соавтором фотографии, помимо Иванова?",
-          "question_type": "multiple_choice"
-        }
-      },
-      {
-        "model": "tests.Answer",
-        "pk": 1,
-        "fields": {
-          "question": 6,
-          "text": "Сидоров",
-          "is_correct": false
-        }
-      },
-      {
-        "model": "tests.Answer",
-        "pk": 2,
-        "fields": {
-          "question": 6,
-          "text": "Петров",
-          "is_correct": false
-        }
-      },
-      {
-        "model": "tests.Answer",
-        "pk": 3,
-        "fields": {
-          "question": 6,
-          "text": "Смирнов",
-          "is_correct": true
-        }
-      },
-      {
-        "model": "tests.Answer",
-        "pk": 4,
-        "fields": {
-          "question": 6,
-          "text": "Никто",
-          "is_correct": false
-        }
-      },
-      {
-        "model": "tests.Answer",
-        "pk": 1,
-        "fields": {
-          "question": 3,
-          "text": "Прохождение формальных регистрационных процедур",
-          "is_correct": false
-        }
-      }
+  {
+    "model": "tests.Test",
+    "pk": 1,
+    "fields": {
+      "article": 1,
+      "title": "Тест Фотография как объект авторского права"
+    }
+  },
+  {
+    "model": "tests.Question",
+    "pk": 1,
+    "fields": {
+      "test": 1,
+      "text_description": "Впишите недостающее слово:",
+      "text_task": "_______ право – это раздел права, регулирующий отношения, связанные с творческой деятельностью человека.",
+      "question_type": "text"
+    }
+  },
+  {
+    "model": "tests.Answer",
+    "pk": 1,
+    "fields": {
+      "question": 1,
+      "text": "Авторское",
+      "is_correct": true
+    }
+  },
+  {
+    "model": "tests.Question",
+    "pk": 2,
+    "fields": {
+      "test": 1,
+      "text_description": "Выберите правильный вариант ответа (или несколько вариантов ответа):",
+      "text_task": "Какие объекты не охраняются авторским правом?",
+      "question_type": "multiple_choice"
+    }
+  },
+  {
+    "model": "tests.Answer",
+    "pk": 1,
+    "fields": {
+      "question": 2,
+      "text": "Фотографии",
+      "is_correct": false
+    }
+  },
+  {
+    "model": "tests.Answer",
+    "pk": 2,
+    "fields": {
+      "question": 2,
+      "text": "Изобретения",
+      "is_correct": true
+    }
+  },
+  {
+    "model": "tests.Answer",
+    "pk": 3,
+    "fields": {
+      "question": 2,
+      "text": "Товарные знаки",
+      "is_correct": true
+    }
+  },
+  {
+    "model": "tests.Answer",
+    "pk": 4,
+    "fields": {
+      "question": 2,
+      "text": "Фильмы",
+      "is_correct": false
+    }
+  },
+  {
+    "model": "tests.Answer",
+    "pk": 5,
+    "fields": {
+      "question": 2,
+      "text": "Литературные произведения",
+      "is_correct": false
+    }
+  },
+  {
+    "model": "tests.Question",
+    "pk": 3,
+    "fields": {
+      "test": 1,
+      "text_description": "Выберите правильный вариант ответа (или несколько вариантов ответа):",
+      "text_task": "Что необходимо для возникновения авторских прав на фотографию?",
+      "question_type": "multiple_choice"
+    }
+  },
+  {
+    "model": "tests.Answer",
+    "pk": 1,
+    "fields": {
+      "question": 3,
+      "text": "Прохождение формальных регистрационных процедур",
+      "is_correct": false
+    }
+  },
+  {
+    "model": "tests.Answer",
+    "pk": 2,
+    "fields": {
+      "question": 3,
+      "text": "Творческий характер фотографии",
+      "is_correct": true
+    }
+  },
+  {
+    "model": "tests.Answer",
+    "pk": 3,
+    "fields": {
+      "question": 3,
+      "text": "Особое назначение фотоснимка",
+      "is_correct": false
+    }
+  },
+  {
+    "model": "tests.Answer",
+    "pk": 4,
+    "fields": {
+      "question": 3,
+      "text": "Объективное выражение фотоснимка",
+      "is_correct": true
+    }
+  },
+  {
+    "model": "tests.Question",
+    "pk": 4,
+    "fields": {
+      "test": 1,
+      "text_description": "Выберите правильный вариант ответа (или несколько вариантов ответа):",
+      "text_task": "Охраняются ли авторским правом фото созданные только для объективной и достоверной фиксации информации об объекте съемки при отсутствии творческого вклада фотографа?",
+      "question_type": "multiple_choice"
+    }
+  },
+  {
+    "model": "tests.Answer",
+    "pk": 1,
+    "fields": {
+      "question": 4,
+      "text": "Да",
+      "is_correct": false
+    }
+  },
+  {
+    "model": "tests.Answer",
+    "pk": 4,
+    "fields": {
+      "question": 2,
+      "text": "Нет",
+      "is_correct": true
+    }
+  },
+  {
+    "model": "tests.Question",
+    "pk": 5,
+    "fields": {
+      "test": 1,
+      "text_description": "Выберите правильный вариант ответа (или несколько вариантов ответа):",
+      "text_task": "У кого первоначально возникают авторские права на фотографию?",
+      "question_type": "multiple_choice"
+    }
+  },
+  {
+    "model": "tests.Answer",
+    "pk": 1,
+    "fields": {
+      "question": 5,
+      "text": "У фотографа",
+      "is_correct": true
+    }
+  },
+  {
+    "model": "tests.Answer",
+    "pk": 2,
+    "fields": {
+      "question": 5,
+      "text": "У государства",
+      "is_correct": false
+    }
+  },
+  {
+    "model": "tests.Answer",
+    "pk": 3,
+    "fields": {
+      "question": 5,
+      "text": "У работодателя фотографа",
+      "is_correct": false
+    }
+  },
+  {
+    "model": "tests.Answer",
+    "pk": 4,
+    "fields": {
+      "question": 5,
+      "text": "У заказчика фотографа",
+      "is_correct": false
+    }
+  },
+  {
+    "model": "tests.Question",
+    "pk": 6,
+    "fields": {
+      "test": 1,
+      "text_description": "Решите задачу",
+      "text_task": "Иванов сделал ряд фотографий озера Байкал. Петров предоставил Иванову камеру, Сидоров оплатил Иванову билеты до озера, Смирнов помогал Иванову выбирать экспозицию и настраивал резкость кадра. Кто из них является соавтором фотографии, помимо Иванова?",
+      "question_type": "multiple_choice"
+    }
+  },
+  {
+    "model": "tests.Answer",
+    "pk": 1,
+    "fields": {
+      "question": 6,
+      "text": "Сидоров",
+      "is_correct": false
+    }
+  },
+  {
+    "model": "tests.Answer",
+    "pk": 2,
+    "fields": {
+      "question": 6,
+      "text": "Петров",
+      "is_correct": false
+    }
+  },
+  {
+    "model": "tests.Answer",
+    "pk": 3,
+    "fields": {
+      "question": 6,
+      "text": "Смирнов",
+      "is_correct": true
+    }
+  },
+  {
+    "model": "tests.Answer",
+    "pk": 4,
+    "fields": {
+      "question": 6,
+      "text": "Никто",
+      "is_correct": false
+    }
+  },
+  {
+    "model": "tests.Answer",
+    "pk": 1,
+    "fields": {
+      "question": 3,
+      "text": "Прохождение формальных регистрационных процедур",
+      "is_correct": false
+    }
+  }
 ]

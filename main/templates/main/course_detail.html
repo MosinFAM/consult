@@ -11,13 +11,13 @@
     <ul>
         {% for article in course.article_set.all %}
             <li>
+                <a href="{% url 'article_detail' course.id article.id %}">{{ article.title }}</a></br>
                 {% for test in tests %}
                     {% if article.tests %}
-                    <a href="{% url 'article_detail' course.id article.id %}">{{ article.title }}</a></br>
-                        <a href="{% url 'test_detail' course.id article.id test.id %}" class="btn btn-link text-decoration-none", >Пройти тест</a>
+                    <a href="{% url 'test_detail' course.id article.id test.id %}" class="btn btn-link text-decoration-none", >Пройти тест</a>
                     {% else %}
                         <span>Тест недоступен</span>
-                {% endif %}
+                    {% endif %}
                 {% endfor %}
             </li>
         {% endfor %}
