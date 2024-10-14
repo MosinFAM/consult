@@ -1,23 +1,21 @@
-<!-- templates/tests/test_results.html -->
-{% extends 'base.html' %}
+{% extends "main/base.html" %}
+
+{% block title %}Результаты теста для {{ article.title }}{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h2 class="mb-4">Результаты Теста: {{ test.title }}</h2>
-    {% if result %}
-        <p>Ваш балл: {{ result.score }} из {{ test.questions.count }}</p>
-        {% if result.passed %}
-            <div class="alert alert-success" role="alert">
-                Поздравляем! Вы прошли тест.
-            </div>
-        {% else %}
-            <div class="alert alert-danger" role="alert">
-                К сожалению, вы не прошли тест. Попробуйте ещё раз.
-            </div>
-        {% endif %}
-    {% else %}
-        <p>Нет данных о результатах теста.</p>
-    {% endif %}
-    <a href="{% url 'course_detail' course.id %}" class="btn btn-primary">Вернуться к курсу</a>
-</div>
+<h2>Результаты теста: {{ test.title }}</h2>
+
+<p>Вы набрали {{ test_result.score }} из 100 баллов.</p>
+<p>Правильных ответов: {{ test_result.score }}%</p>
+<p>Всего вопросов: {{ test_result.total_questions }}</p>
+
+{% if test_result.passed %}
+    <p class="text-success">Вы успешно прошли тест!</p>
+{% else %}
+    <p class="text-danger">К сожалению, вы не прошли тест. Попробуйте снова.</p>
+{% endif %}
+
+<a href="{% url 'test_detail' course_id=course.id article_id=article.id test_id=test.id %}">Пройти тест заново</a>
+<a href="{% url 'course_detail' course.id %}">Вернуться к курсу</a>
+
 {% endblock %}
