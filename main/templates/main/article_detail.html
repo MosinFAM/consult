@@ -13,10 +13,10 @@
 
 {% for test in tests %}
 
-    <a href="{% url 'test_detail' article.course.id article.id test.id %}" class="btn btn-primary">Пройти тест</a></br>
+    <a href="{% url 'test_detail' article.course.id article.id test.id %}" class="btn btn-primary"  style="margin-bottom: 20px;  margin-left: 20px; margin-right: 20px;">Пройти тест</a></br>
 {%  endfor %}
 </br>
-    <a href="{% url 'course_detail' article.course.id %}" class="btn btn-primary" style="margin-bottom: 20px;">Вернуться к курсу</a>
+    <a href="{% url 'course_detail' article.course.id %}" class="btn btn-primary" style="margin-bottom: 20px;  margin-left: 20px; margin-right: 20px;">Вернуться к курсу</a>
 
 </div>
 
