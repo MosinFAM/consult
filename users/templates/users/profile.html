@@ -1,28 +1,31 @@
 {% extends "main/base.html" %}
 
-
 {% block content %}
-<h2>Ваш профиль</h2>
-
-<ul>
-<h3>Ваши курсы</h3>
-
-    {% for course in courses %}
-        <li>
-            <a href="{% url 'course_detail' course.id %}">{{ course.title }}</a>
-        </li>
-    {% empty %}
-        <p>Вы пока не записаны на курсы.</p>
-    {% endfor %}
-
-<h3>Информация о пользователе</h3>
-<p>Имя: {{ user.username }}</p>
-{% if user.email %}
-    <p>Email: {{ user.email }}</p>
-{% endif %}
-    
-<a href="{% url 'edit_profile' %}" class="btn btn-primary">Редактировать профиль</a>
-
-</ul>
-
+<div class="container mt-5" style="font-size: 20px;">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h3 class="mb-4">Ваш профиль</h3>
+                    <h4>Ваши курсы</h4>
+                    <ul class="list-group mb-4">
+                        {% for course in courses %}
+                            <li class="list-group-item">
+                                <a href="{% url 'course_detail' course.id %}">{{ course.title }}</a>
+                            </li>
+                        {% empty %}
+                            <li class="list-group-item">Вы пока не записаны на курсы.</li>
+                        {% endfor %}
+                    </ul>
+                    <h4>Информация о пользователе</h4>
+                    <p>Имя: {{ user.username }}</p>
+                    {% if user.email %}
+                        <p>Email: {{ user.email }}</p>
+                    {% endif %}
+                    <a href="{% url 'edit_profile' %}" class="btn btn-primary mt-3">Редактировать профиль</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
