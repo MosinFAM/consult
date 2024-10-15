@@ -1,0 +1,22 @@
+{% extends "main/base.html" %}
+
+{% block title %}Результаты теста{% endblock %}
+
+{% block content %}
+<h2>Результаты теста для {{ course.title }}</h2>
+
+<p>Вы ответили правильно на {{ correct_answers }} из {{ total_questions }} вопросов.</p>
+
+<h3>Детализация ответов:</h3>
+<ul>
+    {% for question, user_answer, correct_answer in result_details %}
+        <li>
+            <strong>{{ question.text }}</strong><br>
+            Ваш ответ: {{ user_answer.text }}<br>
+            Правильный ответ: {{ correct_answer.text }}
+        </li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'course_detail' course.id %}">Вернуться к курсу</a>
+{% endblock %}

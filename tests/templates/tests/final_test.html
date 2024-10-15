@@ -8,18 +8,31 @@
 <form method="POST">
     {% csrf_token %}
     {% for question in test.questions.all %}
-        <h4>{{ question.text }}</h4>
-        {% if question.question_type == 'mcq' %}
-            {% for answer in question.answer_set.all %}
-                <label>
-                    <input type="radio" name="question_{{ question.id }}" value="{{ answer.id }}">
-                    {{ answer.text }}
-                </label><br>
-            {% endfor %}
-        {% else %}
-            <textarea name="question_{{ question.id }}"></textarea>
-        {% endif %}
+        <div>
+            <h4>{{ question.text }}</h4>
+            {% if question.question_type == 'mcq' %}
+                {% for answer in question.answer_set.all %}
+                    <label>
+                        <input type="radio" name="question_{{ question.id }}" value="{{ answer.id }}" required>
+                        {{ answer.text }}
+                    </label><br>
+                {% endfor %}
+            {% else %}
+                <textarea name="question_{{ question.id }}" required placeholder="Введите ваш ответ"></textarea>
+            {% endif %}
+        </div>
     {% endfor %}
     <button type="submit">Submit Test</button>
 </form>
+
+{% if errors %}
+    <div class="errors">
+        <ul>
+            {% for error in errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+
 {% endblock %}

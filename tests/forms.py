@@ -5,3 +5,4 @@ class Test(forms.ModelForm):
     class Meta:
         model = Test
         fields = ['article', 'title']
+

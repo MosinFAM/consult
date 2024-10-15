@@ -17,7 +17,8 @@ class ArticleForm(forms.ModelForm):
 class QuestionForm(forms.ModelForm):
     class Meta:
         model = Question
-        fields = ['text', 'is_final_question']
+        #fields = ['text', 'is_final_question']
+        fields = ['text', 'question_type']
 
 
 class AnswerForm(forms.ModelForm):

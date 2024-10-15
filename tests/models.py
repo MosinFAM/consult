@@ -2,11 +2,11 @@ from django.db import models
 from django.contrib.auth.models import User
 from main.models import Article, Course
 
-
 # Тест для статьи
 class Test(models.Model):
     article = models.OneToOneField(Article, on_delete=models.CASCADE, related_name='tests')
     title = models.CharField(max_length=255)
+    prerequisite_test = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return f'Test for {self.article.title}'
@@ -22,14 +22,15 @@ class Question(models.Model):
     CHOICE = 'choice'
 
     QUESTION_TYPES = [
-        (OPEN, 'Open-ended'),
-        (CHOICE, 'Multiple choice'),
+        (OPEN, 'Открытый вопрос'),
+        (CHOICE, 'Множественный выбор'),
     ]
 
     test = models.ForeignKey(Test, on_delete=models.CASCADE, related_name='questions')
     text = models.TextField()
-    question_type = models.CharField(max_length=10, choices=QUESTION_TYPES, default=CHOICE)  # Тип вопроса
+    question_type = models.CharField(max_length=10, choices=QUESTION_TYPES, default=CHOICE)
     correct_answer = models.TextField()
+
     def __str__(self):
         return f'{self.text}'
 
@@ -38,7 +39,11 @@ class Question(models.Model):
         verbose_name_plural = 'Вопросы'
 
 
-# Вариант ответа
+
+
+
+
+# # Вариант ответа
 class Answer(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE, limit_choices_to={'question_type': 'choice'})
     text = models.CharField(max_length=255)
@@ -50,6 +55,8 @@ class Answer(models.Model):
     class Meta:
         verbose_name = 'Ответ'
         verbose_name_plural = 'Ответы'
+
+
 
 
 # Открытые ответы пользователя (для вопросов с открытым ответом)
@@ -85,7 +92,7 @@ class TestResult(models.Model):
 # Финальный тест по курсу
 class FinalTest(models.Model):
     course = models.OneToOneField(Course, on_delete=models.CASCADE)
-    questions = models.ManyToManyField(Question)  # Вопросы финального теста
+    questions = models.ManyToManyField(Question)
 
     def __str__(self):
         return f"Final Test for {self.course.title}"
@@ -110,11 +117,15 @@ class FinalTestResult(models.Model):
         verbose_name = 'Результат финального теста'
         verbose_name_plural = 'Результаты финальных тестов'
 
-# Модель для связи  теста и курса
+
+# Модель для связи теста и курса (или статьи)
 class Enrollment(models.Model):
-    tests = models.ForeignKey(Test, on_delete=models.CASCADE)
+    test = models.ForeignKey(Test, on_delete=models.CASCADE)
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
     enrolled_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.tests.title} тест от  {self.article.title}"
+        return f"{self.test.title} тест от  {self.article.title}"
+
+
+
