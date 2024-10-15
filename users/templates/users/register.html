@@ -1,21 +1,25 @@
 {% extends "main/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-    <div class="content-section">
-        <form method="POST">
-            {% csrf_token %}
-            <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Присоединяйтесь к нам</legend>
-                {{ form|crispy }}
-            </fieldset>
-            <div class="form-group">
-                <button class="btn btn-outline-info" type="submit">Зарегистрироваться</button>
+    <div class="container mt-5" style="font-size: 20px;">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h3 class="text-center mb-4">Присоединяйтесь к нам</h3>
+                        <form method="POST">
+                            {% csrf_token %}
+                            {{ form|crispy }}
+                            <button class="btn btn-info btn-block mt-3" type="submit">Зарегистрироваться</button>
+                        </form>
+                        <div class="text-center mt-4">
+                            <small class="text-muted">Уже есть аккаунт? 
+                                <a href="{% url 'login' %}">Войти</a>
+                            </small>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </form>
-        <div class="border-top pt-3">
-            <small class="text-muted">
-                Уже есть аккаунт? <a class="ml-2" href="{% url 'login' %}">Войти</a>
-            </small>
         </div>
     </div>
-{% endblock content %}
+{% endblock %}
