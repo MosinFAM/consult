@@ -15,15 +15,16 @@ def enhance_html(html_content):
             font-size: 20px;
             margin-left: 20px;
             margin-right: 20px;
-            line-height: 1.6;
-            text-align: justify;
         }
         ul {
-            margin-left: 40px;
             font-size: 20px;
+            margin-left: 20px;
+            margin-right: 20px;
         }
         li {
-            margin-bottom: 10px;
+            font-size: 20px;
+            margin-left: 20px;
+            margin-right: 20px;
         }
         a {
             color: #0066cc;
