@@ -77,3 +77,14 @@ sudo lsof -t -i tcp:8000 | xargs kill -9
 
 
 python manage.py loaddata data.json
+
+
+## Основные команды в Django
+
+
+Обновить визуел статей (добавить отступы, изменить размер шрифта и тд.) можно в main/utils/html_processor.py
+
+после чего прописываете команду ниже, и html статей в базе данных обновляется
+```bash
+python manage.py update_content  
+```
