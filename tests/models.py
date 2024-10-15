@@ -61,11 +61,16 @@ class OpenAnswer(models.Model):
     answer_text = models.TextField()
 
     def __str__(self):
-        return f'Answer by {self.user.username} for question {self.question.text}'
+        return f'Answer by {self.user.username} for question {self.question}'
+    
+    # def __str__(self):
+    #     return f'Answer by {self.user.username} for question {self.question.text}'
 
     class Meta:
         verbose_name = 'Открытый ответ'
         verbose_name_plural = 'Открытые ответы'
+
+
 
 
 # Финальный тест по курсу
@@ -96,6 +101,10 @@ class FinalTestResult(models.Model):
         verbose_name = 'Результат финального теста'
         verbose_name_plural = 'Результаты финальных тестов'
 
+
+
+
+
 class TestResult(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     test = models.ForeignKey(Test, on_delete=models.CASCADE)
@@ -103,9 +112,25 @@ class TestResult(models.Model):
     total_questions = models.IntegerField()  # Общее количество вопросов
     passed = models.BooleanField(default=False)
 
+    answer_text = models.TextField(null=True, blank=True)
+
     def __str__(self):
-        return f"{self.profile.user.username} - {self.test.title}"
+        return f"{self.profile.user.username} - {self.test.title} - {self.score}"
 
     class Meta:
         verbose_name = 'Результат теста'
         verbose_name_plural = 'Результаты тестов'
+
+
+
+
+
+# Модель для связи теста и курса (или статьи)
+class Enrollment(models.Model):
+    test = models.ForeignKey(Test, on_delete=models.CASCADE)
+    article = models.ForeignKey(Article, on_delete=models.CASCADE)
+    enrolled_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.test.title} тест от  {self.article.title}"
+
