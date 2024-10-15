@@ -1,6 +1,7 @@
 {% extends "main/base.html" %}
 
 
+
 {% block title %}
 Главная - Образовательная Платформа по Интеллектуальному Праву
 {% endblock %}
@@ -9,49 +10,57 @@
 <div class="container text-center">
     <div class="section">
         <h1 class="display-4">Добро пожаловать на платформу ИНТЕЛЛЕКСИУМ</h1>
-        <p class="lead">
+        <p class="lead" style="font-size: 24px;">
             — образовательную платформу для изучения права интеллектуальной собственности. 
             Здесь вы найдете доступные курсы, интерактивные тесты и сможете получить сертификаты, подтверждающие ваши знания. 
             Мы делаем сложные правовые темы простыми и понятными, чтобы вы могли уверенно защищать свои разработки, инновации и другие интеллектуальные достижения.
         </p>
-        <p class="lead">
+        <p class="lead" style="font-size: 24px;">
             Наши курсы помогут вам разобраться с основами авторского права, патентов, торговых марок и других аспектов интеллектуальной собственности.
         </p> 
-        <img src="https://img.freepik.com/free-photo/close-up-idea-concept_23-2148882592.jpg" class="img-fluid rounded mt-4" alt="Интеллектуальная Собственность">
     </div>
     
     <div class="section text-center mt-5">
-        <h2>Почему стоит выбрать нас?</h2>
-        <div class="row mt-4">
-            <div class="col-md-4">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">Интерактивные материалы</h5>
-                        <p class="card-text">Увлекательные курсы с текстами, видео, инфографикой и анимациями, помогающие усвоить информацию легче и быстрее.</p>
-                    </div>
+    <h3 class="mb-4">Актуальные курсы</h3>
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Авторское право на фотографии</h5>
+                    {% comment %} <p class="card-text">Краткое описание.</p> {% endcomment %}
+                    <a href="{% url 'course_detail' 1 %}" class="btn btn-primary btn-sm">Перейти к курсу</a>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">Доступно каждому</h5>
-                        <p class="card-text">Наши курсы подходят как для новичков, так и для тех, кто уже имеет знания в области интеллектуальной собственности.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">Сертификаты и прогресс</h5>
-                        <p class="card-text">Пройдите тесты и получите сертификат по завершению курса, отслеживайте свой прогресс и улучшайте свои навыки.</p>
-                    </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Компьютерное пиратство</h5>
+                    {% comment %} <p class="card-text">Краткое описание.</p> {% endcomment %}
+                    <a href="{% url 'course_detail' 2 %}" class="btn btn-primary btn-sm">Перейти к курсу</a>
                 </div>
             </div>
         </div>
     </div>
+</div>
+
+
+<style>
+    .section {
+        background-color: #f8f9fa; /* Светлый фон для секции */
+        padding: 30px 0; /* Отступы сверху и снизу */
+        border-radius: 8px; /* Закругленные углы */
+    }
+    .card {
+        transition: transform 0.2s; /* Анимация при наведении */
+    }
+    .card:hover {
+        transform: scale(1.05); /* Увеличение карты при наведении */
+    }
+</style>
     
     <div class="section mt-5">
-        <a href="{% url 'category_list' %}" class="btn btn-primary btn-lg">Просмотреть Курсы</a>
+        <a href="{% url 'category_list' %}" class="btn btn-primary btn-lg">Просмотреть все разделы</a>
     </div>
 </div>
 {% endblock %}
