@@ -20,6 +20,44 @@
         </p> 
     </div>
     
+
+    <!-- Форма поиска -->
+    <form method="GET" action="{% url 'search_courses' %}" class="mt-4">
+        <input type="text" name="q" class="form-control" placeholder="Поиск по курсам..." value="{{ query|default:'' }}">
+        <button type="submit" class="btn btn-primary mt-2">Найти</button>
+    </form>
+
+<!-- Сообщение, если ничего не найдено -->
+{% if message %}
+    <div class="alert alert-danger mt-3" role="alert">
+        {{ message }}
+    </div>
+{% endif %}
+
+<!-- Результаты поиска -->
+{% if courses %}
+    <div class="section text-center mt-5">
+        <h3 class="mb-4">Результаты поиска</h3>
+        <div class="row justify-content-center mt-4">
+            {% for course in courses %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm border-light">
+                        <img src="{{ course.image_url }}" class="card-img-top" alt="{{ course.title }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ course.title }}</h5>
+                            <p class="card-text">{{ course.description|truncatewords:20 }}</p>
+                            <a href="{% url 'course_detail' course.id %}" class="btn btn-primary">Перейти к курсу</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}
+
+
+
+    <!-- Секция с курсами -->
     <div class="section text-center mt-5">
     <h3 class="mb-4">Актуальные курсы</h3>
     <div class="row justify-content-center mt-4">

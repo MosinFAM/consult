@@ -24,4 +24,19 @@
             {% endfor %}
         </div>
     {% endif %}
+
+
+<style>
+    .section {
+        background-color: #f8f9fa; /* Светлый фон для секции */
+        padding: 30px 0; /* Отступы сверху и снизу */
+        border-radius: 8px; /* Закругленные углы */
+    }
+    .card {
+        transition: transform 0.2s; /* Анимация при наведении */
+    }
+    .card:hover {
+        transform: scale(1.05); /* Увеличение карты при наведении */
+    }
+</style>
 {% endblock %}

@@ -74,3 +74,18 @@ def courses_by_category(request, category_id):
 # def test_detail(request, course_id, article_id, test_id):
 #     test = get_object_or_404(Test, id=test_id, article_id=article_id, course_id=course_id)
 #     return render(request, 'main/test_detail.html', {'test': test})
+
+
+def search_courses(request):
+    query = request.GET.get('q')  # Получаем строку запроса
+    courses = None
+    message = None  # Сообщение для случая, если ничего не найдено
+
+    if query:
+        # Ищем курсы по названию или описанию (по частям слов)
+        courses = Course.objects.filter(title__icontains=query) | Course.objects.filter(description__icontains=query)
+
+        if not courses.exists():
+            message = f'По запросу "{query}" ничего не найдено.'
+
+    return render(request, 'main/home.html', {'courses': courses, 'message': message, 'query': query})
