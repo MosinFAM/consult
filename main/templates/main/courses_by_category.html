@@ -2,12 +2,12 @@
 
 {% block content %}
     <h2 class="text-margin pr-8">Курсы в категории: {{ category.name }}</h2>
-    <p class="text-margin pr-6">Раздел "Авторское право" на платформе "Интеллексиум" посвящён ключевым аспектам правового регулирования творческих произведений. Здесь вы найдете курсы, которые подробно рассматривают отдельные объекты авторского права, включая фотографии, музыкальные, литературные произведения и другие формы творчества. Вы научитесь понимать, как защитить свои авторские права и эффективно распоряжаться ими.</p>
     {% if message %}
         <p>{{ message }}</p>
     {% else %}
         <div class="row p-3">
             {% for course in courses %}
+            <h6 style="margin-bottom: 20px;  margin-left: 20px; margin-right: 20px; font-size: 20px;">{{ course.description }}</h6>
                 <div class="col-md-4">
                     <div class="card" style="height: 350px; width: 350px">
                         <img src="{% if course.image_url %}{{ course.image_url }}{% else %}https://via.placeholder.com/300x200{% endif %}" 
