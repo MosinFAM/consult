@@ -21,7 +21,7 @@
                                 <input type="radio" name="question_{{ question.id }}" value="{{ answer.id }}">
                                 {{ answer.text }}
                             </label>
-                        </li>
+                        </li> 
                     {% endfor %}
                 {% elif question.question_type == 'text' %}
                     <!-- Если вопрос открытого типа, показываем текстовое поле для ввода -->

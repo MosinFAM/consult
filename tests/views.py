@@ -30,7 +30,9 @@ def test_detail_ok(request, course_id, article_id, test_id):
 def test_detail(request, course_id, article_id, test_id):
     print(f"Querying Profile with course_id={course_id}, article_id={article_id}, test_id={test_id}")
     course = get_object_or_404(Course, id=course_id)
+    print(f"Found course: {course}")
     article = get_object_or_404(Article, id=article_id, course=course)
+    print(f"Found course: {article}")
     test = get_object_or_404(Test, id=test_id, article=article)
     profile = get_object_or_404(Profile, user=request.user)
     questions = test.questions.all()
@@ -66,12 +68,12 @@ def test_detail(request, course_id, article_id, test_id):
                 test=test,
                 score=score,
                 total_questions=total,
-                passed=(score >= (total - 1)),
+                passed=(score >= (total - 1)), 
                 answer_text=user_answer  # Сохраняем текст ответа
             )
 
-        return redirect('test_results', course_id=course.id, article_id=article.id, test_id=test.id)
-
+        # return redirect('test_results', course_id=course.id, article_id=article.id, test_id=test.id)
+    print(f"Found test: {test}")
     return render(request, 'tests/test_detail.html', {
         'course': course,
         'article': article,
@@ -81,7 +83,7 @@ def test_detail(request, course_id, article_id, test_id):
 
 
 
-
+ 
 @login_required
 def test_results(request, course_id, article_id, test_id):
     course = get_object_or_404(Course, id=course_id)

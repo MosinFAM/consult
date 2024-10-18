@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from main.models import Course, Article, Category
-from tests.models import Test, Question
+from tests.models import Test, Question, TestResult
+from users.models import Profile
 from users.models import Enrollment
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -26,10 +27,13 @@ def course_detail(request, course_id):
 # Детализация курса с логикой регистрации на курс
 @login_required
 def course_detail(request, course_id):
+    profile = get_object_or_404(Profile, user=request.user)
     course = get_object_or_404(Course, id=course_id)
     article = get_object_or_404(Article, id=course_id)
     is_enrolled = Enrollment.objects.filter(user=request.user, course=course).exists()
     tests = Test.objects.filter(article=article) 
+    passed_tests = TestResult.objects.filter(profile=profile, passed=True).values_list('test_id', flat=True)
+    print(passed_tests)
 
     if request.method == 'POST':
         if 'enroll' in request.POST:
@@ -43,7 +47,8 @@ def course_detail(request, course_id):
     context = {
         'course': course,
         'is_enrolled': is_enrolled, 
-        'tests': tests
+        'tests': tests,
+        'passed_tests': passed_tests
     }   
     return render(request, 'main/course_detail.html', context)
 

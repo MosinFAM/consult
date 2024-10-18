@@ -9,12 +9,16 @@
 
     <h3 class="text-margin pr-8">Содержание курса:</h3>
     <ul>
-        {% for article in course.article_set.all %}
+        {% for article in course.article_set.all  %}
             <li>
                 <a href="{% url 'article_detail' course.id article.id %}">{{ article.title }}</a></br>
                 {% for test in tests %}
                     {% if article.tests %}
-                    <a href="{% url 'test_detail' course.id article.id test.id %}" class="btn btn-link text-decoration-none", >Пройти тест</a>
+                        {% if test_id  in passed_tests %}
+                            <span class="btn btn-success text-decoration-none">Тест пройден</span>
+                        {% else %}
+                            <a href="{% url 'test_detail' article.course.id article.id test.id %}" class="btn btn-link text-decoration-none", >Пройти тест</a>
+                        {% endif %}
                     {% else %}
                         <span>Тест недоступен</span>
                     {% endif %}

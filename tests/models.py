@@ -68,7 +68,7 @@ class OpenAnswer(models.Model):
 
     class Meta:
         verbose_name = 'Открытый ответ'
-        verbose_name_plural = 'Открытые ответы'
+        verbose_name_plural = 'Открытые ответы' 
 
 
 
