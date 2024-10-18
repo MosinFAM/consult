@@ -9,13 +9,15 @@ from users.models import Profile
 class Test(models.Model):
     article = models.OneToOneField(Article, on_delete=models.CASCADE, related_name='tests')
     title = models.CharField(max_length=255)
+    order = models.PositiveIntegerField(default=1)
 
     def __str__(self):
-        return f'Test for {self.article.title}'
+        return f'Test {self.order} for {self.article.title}'
 
     class Meta:
         verbose_name = 'Тест'
         verbose_name_plural = 'Тесты'
+        ordering = ['order']
 
 
 # Вопрос
@@ -112,7 +114,7 @@ class TestResult(models.Model):
     total_questions = models.IntegerField()  # Общее количество вопросов
     passed = models.BooleanField(default=False)
 
-    answer_text = models.TextField(null=True, blank=True)
+    answer_text = models.TextField(null=True, blank=True, default=" ")
 
     def __str__(self):
         return f"{self.profile.user.username} - {self.test.title} - {self.score}"

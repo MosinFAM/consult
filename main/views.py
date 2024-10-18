@@ -5,6 +5,8 @@ from users.models import Profile
 from users.models import Enrollment
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Max
+
 
 
 # Главная страница
@@ -33,7 +35,14 @@ def course_detail(request, course_id):
     is_enrolled = Enrollment.objects.filter(user=request.user, course=course).exists()
     tests = Test.objects.filter(article=article) 
     passed_tests = TestResult.objects.filter(profile=profile, passed=True).values_list('test_id', flat=True)
-    print(passed_tests)
+    print("LEN OF PASSED:", len(passed_tests))
+    passed_test_ids = set(passed_tests)
+
+
+    max_order = Test.objects.filter(id__in=passed_tests).aggregate(Max('order'))['order__max'] or 0
+    
+    # Устанавливаем следующий доступный тест
+    next_test_order = max_order + 1
 
     if request.method == 'POST':
         if 'enroll' in request.POST:
@@ -48,7 +57,8 @@ def course_detail(request, course_id):
         'course': course,
         'is_enrolled': is_enrolled, 
         'tests': tests,
-        'passed_tests': passed_tests
+        'passed_tests': passed_test_ids,
+        'next_test_order': next_test_order,
     }   
     return render(request, 'main/course_detail.html', context)
 

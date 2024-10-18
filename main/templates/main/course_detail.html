@@ -1,4 +1,5 @@
 {% extends "main/base.html" %}
+ 
 
 
 {% block content %}
@@ -6,26 +7,68 @@
 {% comment %} <p class="text-margin pr-6">{{ course.description }}</p> {% endcomment %}
 
 {% if is_enrolled %}
-
+<p class="text-margin pr-8">Чтобы успешно пройти курс, мы предлагаем вам ознакомиться с каждой из статей, а после пройти тесты. </br> Помните, что тест будет недоступен, до тех пор, пока вы не прошли предыдущие! </br> Для успешного прохождения допускатеся лишь одна ошибка! </br> После прохождения всех тестов Вам будет предложено пройти финальный тест.</p>
     <h3 class="text-margin pr-8">Содержание курса:</h3>
+    
     <ul>
-        {% for article in course.article_set.all  %}
-            <li>
-                <a href="{% url 'article_detail' course.id article.id %}">{{ article.title }}</a></br>
-                {% for test in tests %}
+        {% comment %} {% with 1 as next_test_order %}
+            {% for article in course.article_set.all %}
+                <li>
+                    <a href="{% url 'article_detail' course.id article.id %}">{{ article.title }}</a></br>
+                    
                     {% if article.tests %}
-                        {% if test_id  in passed_tests %}
-                            <span class="btn btn-success text-decoration-none">Тест пройден</span>
-                        {% else %}
-                            <a href="{% url 'test_detail' article.course.id article.id test.id %}" class="btn btn-link text-decoration-none", >Пройти тест</a>
-                        {% endif %}
+                        {% with article.tests as test %}
+                            {% if test.id in passed_tests %}
+                                <span class="btn btn-success text-decoration-none">Тест пройден</span>
+                                <!-- Обновляем next_test_order перед тем, как проверить следующий тест -->
+                                {% with test.order|add:"1" as next_test_order %}
+                                {% endwith %}
+                            {% elif test.order == next_test_order %}
+                                <a href="{% url 'test_detail' article.course.id article.id test.id %}" class="btn btn-link text-decoration-none">Пройти тест</a>
+                            {% else %}
+                                <span class="btn btn-secondary text-decoration-none" disabled>Тест недоступен</span>
+                            {% endif %}
+                        {% endwith %}
                     {% else %}
                         <span>Тест недоступен</span>
                     {% endif %}
-                {% endfor %}
-            </li>
-        {% endfor %}
+                </li>
+            {% endfor %}
+        {% endwith %} {% endcomment %}
+        {% for article in course.article_set.all %}
+    <li>
+        <a href="{% url 'article_detail' course.id article.id %}">{{ article.title }}</a><br>
+
+        {% if article.tests %}
+            {% with article.tests as test %}
+                {% if test.id in passed_tests %}
+                    <span class="btn btn-success text-decoration-none">Тест пройден</span>
+                    {% if not forloop.last %}
+                        <p>Теперь перейдите к следующей статье!</p>
+                    {% else %}
+                        <p>Теперь перейдите к финальному  тестированию!</p>
+                    {% endif %}
+                {% elif test.order == next_test_order %}
+                    <a href="{% url 'test_detail' article.course.id article.id test.id %}" class="btn btn-link text-decoration-none">Пройти тест</a>
+                {% else %}
+                    <span class="btn btn-secondary text-decoration-none" disabled>Тест недоступен</span>
+                {% endif %}
+            {% endwith %}
+        {% else %}
+            <span>Тест недоступен</span>
+        {% endif %}
+    </li>
+{% endfor %}
+
+
     </ul>
+    {% if passed_tests|length == course.article_set.count %}
+    {% comment %} action="{% url 'test_detail' article.course.id article.id test.id %}" {% endcomment %}
+        <form method="POST" action="{% url 'final_test_detail' course.id  %}" style="margin-left: 18px;" >  
+            {% csrf_token %}
+            <button type="submit"   class="btn btn-primary">Пройти финальное тестирование</button>
+        </form>
+    {% endif %}
 
     <form method="POST">
         {% csrf_token %}
@@ -35,6 +78,7 @@
 {% else %}
     <form method="POST">
         {% csrf_token %}
+        <p class="text-margin pr-8">Мы предлагаем ознакомиться с подборкой статей, а также рекомендуем проверить полученные знания!  </br> Для этого вам будут доступны тесты! </p>
         <button type="submit" name="enroll" class="btn btn-primary">Записаться на курс</button>
     </form>
 {% endif %}

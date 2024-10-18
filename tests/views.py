@@ -58,21 +58,41 @@ def test_detail(request, course_id, article_id, test_id):
             elif question.question_type == 'text':
                 # Сохраняем текстовый ответ
                 text_answers[question.id] = user_answer.strip()  # Убираем пробелы в начале и конце
+                # if text_answers[question.id].is_correct:
+                score += 1 
 
         # Здесь вы можете обрабатывать текстовые ответы для хранения
         for question_id, user_answer in text_answers.items():
+            last_result = TestResult.objects.filter(profile=profile, test=test).order_by('-id').first()
             # Вы можете создать отдельную модель для хранения текстовых ответов или
             # просто добавить текст ответа в TestResult
-            TestResult.objects.create(
-                profile=profile,
-                test=test,
-                score=score,
-                total_questions=total,
-                passed=(score >= (total - 1)), 
-                answer_text=user_answer  # Сохраняем текст ответа
-            )
+            if last_result:
+        # Если результат уже существует, обновляем его
+                last_result.score = score
+                last_result.total_questions = total
+                last_result.passed = (score >= (total - 1))
+                last_result.answer_text = user_answer  # Обновляем текст ответа
+                last_result.save()  # Сохраняем изменения
+            else:
+                # Если результата нет, создаем новый
+                TestResult.objects.create(
+                    profile=profile,
+                    test=test,
+                    score=score,
+                    total_questions=total,
+                    passed=(score >= (total - 1)), 
+                    answer_text=user_answer  # Сохраняем текст ответа
+                )
+            # TestResult.objects.create(
+            #     profile=profile,
+            #     test=test,
+            #     score=score,
+            #     total_questions=total,
+            #     passed=(score >= (total - 1)), 
+            #     answer_text=user_answer  # Сохраняем текст ответа
+            # )
 
-        # return redirect('test_results', course_id=course.id, article_id=article.id, test_id=test.id)
+        return redirect('test_results', course_id=course.id, article_id=article.id, test_id=test.id)
     print(f"Found test: {test}")
     return render(request, 'tests/test_detail.html', {
         'course': course,
@@ -98,6 +118,11 @@ def test_results(request, course_id, article_id, test_id):
 
     result = TestResult.objects.filter(profile=profile, test=test).first()
 
+    # if result is None:
+    #     print(f"No result found for profile {profile.id} and test {test.id}.")
+    #     result = TestResult(score=0, total_questions=0, passed=True)
+    
+
     context = {
         'course': course,
         'article': article,
@@ -107,6 +132,110 @@ def test_results(request, course_id, article_id, test_id):
 
     return render(request, 'tests/test_results.html', context)
 
+
+def final_test_detail_ok(request, course_id, article_id, test_id):
+    # test = Test.objects.get(id=article_id)
+    test = get_object_or_404(Test, id=article_id)
+    course = Test.objects.filter(id=course_id) 
+    # article = get_object_or_404(Article, id=article_id, course=course)
+    questions = test.questions.all().prefetch_related('answers')
+
+    context = {
+        'course': course,
+        # 'article': article,
+        'test': test,
+        'questions': questions
+    }
+    return render(request, 'tests/final_test_detail.html', context)
+
+
+
+
+
+@login_required
+def final_test_detail(request, course_id):
+    # print(f"Querying Profile with course_id={course_id}, article_id={article_id}, test_id={test_id}")
+    course = get_object_or_404(Course, id=course_id)
+    print(f"Found course: {course}")
+    profile = get_object_or_404(Profile, user=request.user)
+    # article = get_object_or_404(Article, id=article_id, course=course)
+    # print(f"Found course: {article}")
+    test = get_object_or_404(Test, id=course_id)
+    # profile = get_object_or_404(Profile, user=request.user)
+    questions = test.questions.all()
+
+    if request.method == 'POST':
+        score = 0
+        total = questions.count()
+        # Создаем список для хранения текстовых ответов
+        text_answers = {}
+
+        for question in questions:
+            field_name = f'question_{question.id}'
+            user_answer = request.POST.get(field_name)
+
+            if question.question_type == 'multiple_choice':
+                try:
+                    selected_answer = Answer.objects.get(id=user_answer, question=question)
+                    if selected_answer.is_correct:
+                        score += 1
+                except Answer.DoesNotExist:
+                    pass  # Неверный выбор или не выбран ответ
+
+            elif question.question_type == 'text':
+                # Сохраняем текстовый ответ
+                # text_answers[question.id] = user_answer.strip()  # Убираем пробелы в начале и конце
+                # if text_answers[question.id].is_correct:
+                score += 1 
+
+        # Здесь вы можете обрабатывать текстовые ответы для хранения
+        for question_id, user_answer in text_answers.items():
+            # Вы можете создать отдельную модель для хранения текстовых ответов или
+            # просто добавить текст ответа в TestResult
+            TestResult.objects.create(
+                profile=profile,
+                test=test,
+                score=score,
+                total_questions=total,
+                passed=(score >= (total - 1)), 
+                answer_text=user_answer  # Сохраняем текст ответа
+            )
+
+        return redirect('final_test_results', course_id=course.id)
+    print(f"Found test: {test}")
+    return render(request, 'tests/final_test_detail.html', {
+        'course': course,
+        # 'article': article,
+        # 'test': test,
+        # 'questions': questions,
+    })
+
+
+
+@login_required
+def final_test_results(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+    test = get_object_or_404(Test, id=course_id)
+    # profile = get_object_or_404(Profile, user=request.user)
+
+    profile, created = Profile.objects.get_or_create(user=request.user)
+
+    # Получаем последний результат теста пользователя
+    # result = TestResult.objects.filter(profile=profile, test=test).order_by('-date_taken').first()
+
+    # result = TestResult.objects.filter(profile=profile, test=test).first()
+
+    # if result is None:
+    #     print(f"No result found for profile {profile.id} and test {test.id}.")
+    #     result = TestResult(score=0, total_questions=0, passed=True)
+    
+
+    context = {
+        'course': course,
+        
+    }
+
+    return render(request, 'tests/final_test_results.html', context)
 # Прохождение теста
 class TestPassView(View):
     pass
