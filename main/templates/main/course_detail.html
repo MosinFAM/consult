@@ -1,43 +1,107 @@
 {% extends "main/base.html" %}
- 
-
 
 {% block content %}
-<h2 class="text-margin pr-8">Курс: {{ course.title }}</h2>
-{% comment %} <p class="text-margin pr-6">{{ course.description }}</p> {% endcomment %}
-<style>
-    .disabled-button {
-        color: gray; /* Серый цвет текста */
-        pointer-events: none; /* Отключает взаимодействие */
-        text-decoration: none; /* Убирает подчеркивание */
-    }
-    a:hover {
-        background-color: #e2e6ea; /* Фон при наведении */
-        border-color: #007BFF; /* Рамка при наведении */
-        color: #007BFF; /* Цвет текста при наведении */
-    }
-</style>
-{% if is_enrolled %}
-<p class="text-margin pr-8">Чтобы успешно пройти курс, мы предлагаем вам ознакомиться с каждой из статей, а после пройти тесты. </br> Помните, что тест будет недоступен, до тех пор, пока вы не прошли предыдущие! </br> Для успешного прохождения допускатеся лишь одна ошибка! </br> После прохождения всех тестов Вам будет предложено пройти финальный тест.</p>
-    <h3 class="text-margin pr-8">Содержание курса:</h3>
+<div style="max-width: 1200px; margin: 0 auto; padding: 20px;">
+    <h2 class="text-margin pr-8" style="font-size: 60px; text-align: center;">Курс: {{ course.title }}</h2>
+    {% comment %} <p class="text-margin pr-6">{{ course.description }}</p> {% endcomment %}
     
-    <ul>
-        {% comment %} {% with 1 as next_test_order %}
+    <style>
+        .content-text {
+            font-size: 30px; /* Увеличенный размер текста */
+            line-height: 1.6; /* Увеличенная межстрочная высота для удобства чтения */
+        }
+
+        .btn {
+            font-size: 23px; /* Крупнее текст на кнопках */
+            margin: 10px 0;
+        }
+
+        .btn-primary {
+            background-color: #007BFF;
+            border: none;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            border: none;
+        }
+
+        .btn-outline-primary {
+            border: 2px solid #007BFF;
+            color: #007BFF;
+        }
+
+        .disabled-button {
+            color: gray;
+            pointer-events: none;
+            text-decoration: none;
+        }
+
+        a {
+            font-size: 25px; /* Крупнее ссылки */
+            color: #555555;
+            text-decoration: none;
+        }
+
+
+        .course-content {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .large-button {
+            font-size: 24px; /* Увеличиваем размер текста на кнопке */
+            padding: 15px 30px; /* Увеличиваем отступы внутри кнопки */
+            width: 50%; /* Кнопка будет занимать всю ширину родительского элемента */
+            max-width: 500px; /* Ограничение максимальной ширины кнопки */
+            display: block; /* Блоковое отображение, чтобы кнопка центрировалась */
+            margin: 20px auto; /* Центрирование кнопки и добавление отступов */
+        }
+    </style>
+    
+    <div class="content-text course-content">
+        {% if is_enrolled %}
+        <p style="text-align: center; margin: 20px 0; ">Чтобы успешно пройти курс, мы предлагаем вам ознакомиться с каждой из статей, а после пройти тесты. </br>
+        Помните, что тест будет недоступен, до тех пор, пока вы не прошли предыдущие! </br>
+        Для успешного прохождения допускается лишь одна ошибка! </br>
+        После прохождения всех тестов Вам будет предложено пройти финальный тест.</br></p>
+    </div>
+    
+</br></br></br>
+    <div class="content-text course-content">
+        <h3 style="font-size: 30px;">Содержание курса:</h3>
+
+        <ul>
             {% for article in course.article_set.all %}
-                <li>
-                    <a href="{% url 'article_detail' course.id article.id %}">{{ article.title }}</a></br>
-                    
+                <li style="margin-bottom: 20px;">
+                    <p style="font-size: 37px; 
+                                font-weight: bold; "> Тема {{ forloop.counter }}: {{ article.title }}</p>
+                    {% comment %} <a href="{% url 'article_detail' course.id article.id %}" 
+                        style="font-size: 37px; 
+                                font-weight: bold; 
+                                color: #007BFF; 
+                                text-decoration: none; 
+                                transition: color 0.3s, border-color 0.3s; 
+                                border: 2px solid #007BFF; /* Рамка вокруг ссылки */
+                                padding: 10px 15px; /* Внутренний отступ для пространства между текстом и рамкой */
+                                display: inline-block; /* Для корректного отображения рамки */
+                                border-radius: 5px; /* Скругленные углы, если необходимо */">
+                            Прочитать статью
+                        </a></br> {% endcomment %}
+                        <a href="{% url 'article_detail' course.id article.id %}" class="btn btn-primary btn-lg text-decoration-none">Прочитать статью</a>
                     {% if article.tests %}
                         {% with article.tests as test %}
                             {% if test.id in passed_tests %}
-                                <span class="btn btn-success text-decoration-none">Тест пройден</span>
-                                <!-- Обновляем next_test_order перед тем, как проверить следующий тест -->
-                                {% with test.order|add:"1" as next_test_order %}
-                                {% endwith %}
+                                <span class="btn btn-outline-dark btn-lg text-decoration-none pointer-events-none" disabled>Тест пройден</span>
+                                {% if not forloop.last %}
+                                    <p></br>Теперь перейдите к следующей статье!</p>
+                                {% else %}
+                                    <p></br>Теперь перейдите к финальному тестированию!</p>
+                                {% endif %}
                             {% elif test.order == next_test_order %}
-                                <a href="{% url 'test_detail' article.course.id article.id test.id %}" class="btn btn-link text-decoration-none">Пройти тест</a>
+                                <a href="{% url 'test_detail' article.course.id article.id test.id %}" class="btn btn-dark btn-lg text-decoration-none">Пройти тест</a>
                             {% else %}
-                                <span class="btn btn-secondary text-decoration-none" disabled>Тест недоступен</span>
+                                <span class="btn btn-link disabled-button" disabled>Тест недоступен</span>
                             {% endif %}
                         {% endwith %}
                     {% else %}
@@ -45,56 +109,28 @@
                     {% endif %}
                 </li>
             {% endfor %}
-        {% endwith %} {% endcomment %}
-        {% for article in course.article_set.all %}
-    <li>
-        {% comment %} <a href="{% url 'article_detail' course.id article.id %}">{{ article.title }}</a><br> {% endcomment %}
-        <a> Статья {{ forloop.counter }}:</a><br>
-        <a href="{% url 'article_detail' course.id article.id %}" 
-            style="font-size: 24px; font-weight: bold; color: #555555; text-decoration: none; transition: color 0.3s;">{{ article.title }}</a></br></br>
-
-
-        {% if article.tests %}
-            {% with article.tests as test %}
-                {% if test.id in passed_tests %}
-                    <span class="btn btn-outline-primary text-decoration-none pointer-events-none"  disabled>Тест пройден</span>
-                    {% if not forloop.last %}
-                        <p></br>Теперь перейдите к следующей статье!</p>
-                    {% else %}
-                        <p></br>Теперь перейдите к финальному  тестированию!</p>
-                    {% endif %}
-                {% elif test.order == next_test_order %}
-                    <a href="{% url 'test_detail' article.course.id article.id test.id %}" class="btn btn-primary text-decoration-none">Пройти тест</a>
-                {% else %}
-                    <span class="btn btn-link disabled-button" disabled>Тест недоступен</span>
-                {% endif %}
-            {% endwith %}
-        {% else %}
-            <span>Тест недоступен</span>
+        </ul>
+        
+        {% if passed_tests|length == course.article_set.count %}
+            <form method="POST" action="{% url 'final_test_detail' course.id  %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary large-button">Пройти финальное тестирование</button>
+            </form>
         {% endif %}
-    </li>
-{% endfor %}
-
-
-    </ul>
-    {% if passed_tests|length == course.article_set.count %}
-    {% comment %} action="{% url 'test_detail' article.course.id article.id test.id %}" {% endcomment %}
-        <form method="POST" action="{% url 'final_test_detail' course.id  %}" style="margin-left: 18px;" >  
+        
+        <form method="POST" style="text-align: right;">
             {% csrf_token %}
-            <button type="submit"   class="btn btn-primary">Пройти финальное тестирование</button>
+            <button type="submit" name="unenroll" class="btn btn-secondary m-3">Покинуть курс</button>
         </form>
-    {% endif %}
 
-    <form method="POST">
-        {% csrf_token %}
-        <button type="submit" name="unenroll" class="btn btn-secondary m-3">Покинуть курс</button>
-    </form>
-
-{% else %}
-    <form method="POST">
-        {% csrf_token %}
-        <p class="text-margin pr-8">Мы предлагаем ознакомиться с подборкой статей, а также рекомендуем проверить полученные знания!  </br> Для этого вам будут доступны тесты! </p>
-        <button type="submit" name="enroll" class="btn btn-primary" style="margin-left: 18px;">Записаться на курс</button>
-    </form>
-{% endif %}
+        {% else %}
+        <form method="POST">
+            {% csrf_token %}
+            <p>Мы предлагаем ознакомиться с подборкой статей, а также рекомендуем проверить полученные знания! </br>
+            Для этого вам будут доступны тесты!</p>
+            <button type="submit" name="enroll" class="btn btn-primary">Записаться на курс</button>
+        </form>
+        {% endif %}
+    </div>
+</div>
 {% endblock %}

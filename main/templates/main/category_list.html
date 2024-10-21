@@ -1,14 +1,33 @@
 {% extends "main/base.html" %}
 
 {% block content %}
-    <h2 class="text-margin pr-8">Категории курсов</h2>
-    <ul class="list-group">
-        {% for category in categories %}
-            <li class="list-group-item">
-                <a href="{% url 'courses_by_category' category.id %}">
-                    {{ category.name }}
-                </a>
-            </li>
-        {% endfor %}
-    </ul>
+    <div style="text-align: center;">  <!-- Центрирование контента -->
+        <h2 class="text-margin pr-8" style="font-size: 40px; margin-bottom: 30px;">Категории курсов</h2>
+        <ul class="list-group" style="display: inline-block;">  <!-- Используем inline-block для центрирования списка -->
+            {% for category in categories %}
+                <li class="list-group-item" style="font-size: 24px; padding: 15px;">
+                    <a href="{% url 'courses_by_category' category.id %}" style="text-decoration: none; color: #007BFF; font-weight: bold;">
+                        {{ category.name }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <style>
+        .list-group-item {
+            border: 1px solid #ddd; /* Обрамление элементов списка */
+            margin-bottom: 10px; /* Отступ между элементами */
+            transition: background-color 0.3s, transform 0.2s; /* Плавный переход для фона и анимации */
+            border-radius: 8px; /* Скругленные углы */
+        }
+        .list-group-item:hover {
+            background-color: #f0f0f5; /* Цвет фона при наведении */
+            transform: scale(1.02); /* Легкое увеличение при наведении */
+        }
+        a:hover {
+            color: #0056b3; /* Изменение цвета текста при наведении */
+        }
+    </style>
 {% endblock %}
+

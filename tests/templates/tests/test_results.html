@@ -1,66 +1,55 @@
 {% extends "main/base.html" %}
 
-{% comment %} {% block title %}Результаты теста{% endblock %}
-
-{% block content %}
-<h2>Результаты теста для {{ course.title }}</h2>
-
-<p>Вы ответили правильно на {{ correct_answers }} из {{ total_questions }} вопросов.</p>
-
-<h3>Детализация ответов:</h3>
-<ul>
-    {% for question, user_answer, correct_answer in result_details %}
-        <li>
-            <strong>{{ question.text }}</strong><br>
-            Ваш ответ: {{ user_answer.text }}<br>
-            Правильный ответ: {{ correct_answer.text }}
-        </li>
-    {% endfor %}
-</ul>
-
-<a href="{% url 'course_detail' course.id %}">Вернуться к курсу</a>
-{% endblock %} {% endcomment %}
-
-
-
-
-
-{% comment %} {% block content %}
-<div class="container mt-5">
-    <h2 class="mb-4">Результаты Теста: {{ test.title }}</h2>
-    {% if result %}
-        <p>Ваш балл: {{ result.score }} из {{ test.questions.count }}</p>
-        {% if result.passed %}
-            <div class="alert alert-success" role="alert">
-                Поздравляем! Вы прошли тест.
-            </div>
-        {% else %}
-            <div class="alert alert-danger" role="alert">
-                К сожалению, вы не прошли тест. Попробуйте ещё раз.
-            </div>
-        {% endif %}
-    {% else %}
-        <p>Нет данных о результатах теста.</p>
-    {% endif %}
-    <a href="{% url 'course_detail' course.id %}" class="btn btn-primary">Вернуться к курсу</a>
-</div>
-{% endblock %} {% endcomment %}
-
-
-
 {% block title %}Результаты теста{% endblock %}
 
 {% block content %}
-<h2>Результаты теста для статьи: {{ article.title }}</h2>
+<style>
+    .content-wrapper {
+        padding: 20px; /* Отступы внутри */
+        text-align: center; /* Выравнивание по центру */
+        font-size: 35px; /* Размер шрифта */
+    }
+    h2 {
+        font-size: 40px;
+        margin-bottom: 30px; /* Отступ снизу для заголовка */
+    }
+    .btn-lg {
+        font-size: 27px; /* Увеличенный размер кнопок */
+        margin: 10px 5px; /* Отступ между кнопками */
+    }
+    .spacer {
+        margin-left: 0; /* Убираем отступы слева */
+    }
+    .result-message {
+        margin: 20px 0; /* Отступы сверху и снизу */
+    }
+    .back-link {
+        display: block; /* Блоковое отображение для центрирования */
+        margin-top: 20px; /* Отступ сверху */
+        font-size: 29px; /* Размер текста */
+    }
+</style>
 
-{% if result %}
-    <p>Ваш результат: {{ result.score }} из {{ result.total_questions }}</p>
-    <p>{% if result.passed %}Вы прошли тест!{% else %}Вы не прошли тест.{% endif %}</p>
-{% else %}
-    <p>Результаты теста еще не доступны.</p>
-{% endif %}
+<div class="content-wrapper">
+    <h2>Результаты теста для статьи: {{ article.title }}</h2>
 
-<a href="{% url 'test_detail' course_id=course.id article_id=article.id test_id=test.id %}">Вернуться к тесту</a>
-<a href="{% url 'course_detail' course.id %}">Назад к курсу</a>
+    {% if result %}
+        <p>Ваш результат: {{ result.score }} из {{ result.total_questions }}</p>
+        <div class="result-message">
+            {% if result.passed %}
+                <p>Вы прошли тест! Продолжите обучение!</p>
+                <a href="{% url 'course_detail' course.id %}" class="back-link">Продолжить обучение</a>
+            {% else %} 
+                <p>Вы не прошли тест. Но можете это исправить!</p>
+                <a href="{% url 'article_detail' course.id article.id %}" class="btn btn-primary btn-lg">Прочитать статью ещё раз</a>
+                <a href="{% url 'test_detail' course_id=course.id article_id=article.id test_id=test.id %}" class="btn btn-primary btn-lg">Пройти тест ещё раз</a>
+                <a href="{% url 'course_detail' course.id %}" class="back-link">Назад к курсу</a>
+            {% endif %}
+        </div>
+    {% else %}
+        <p>Результаты теста еще не доступны.</p>
+    {% endif %}
 
+    
+</div>
 {% endblock %}
