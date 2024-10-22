@@ -22,7 +22,7 @@
                     <ul class="list-group mb-4">
                         {% for result in final_test_results %}
                             <li class="list-group-item">
-                                Курс {{ result.final_test.course.title }}: {{ result.score }} баллов из {{ result.total_questions }}
+                                Курс {{ result.final_test.course.title }}: {{ result.score }} баллов из {{ result.total_questions }}</br>
                                 <a href="{% url 'download_certificate' result.final_test.course.id %}" class="btn btn-success float-right">Скачать сертификат</a>
                             </li>
                         {% empty %}
