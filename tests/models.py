@@ -3,10 +3,17 @@ from django.contrib.auth.models import User
 from main.models import Article, Course
 from users.models import Profile
 
+class BaseTest(models.Model):
+    # title = models.CharField(max_length=255)
+    # description = models.TextField()
+    # created_at = models.DateTimeField(auto_now_add=True)
 
-    
-# Тест для статьи
-class Test(models.Model):
+    class Meta:
+        abstract = True  # Указываем, что этот класс абстрактный
+
+class Test(BaseTest):
+    # Здесь могут быть специфические поля для тестов
+    # Если у вас есть дополнительные поля, добавьте их
     article = models.OneToOneField(Article, on_delete=models.CASCADE, related_name='tests')
     title = models.CharField(max_length=255)
     order = models.PositiveIntegerField(default=1)
@@ -20,7 +27,36 @@ class Test(models.Model):
         ordering = ['order']
 
 
+class FinalTest(BaseTest):
+    # Здесь могут быть специфические поля для финальных тестов
+    # Если у вас есть дополнительные поля, добавьте их
+    course = models.OneToOneField(Course, on_delete=models.CASCADE, related_name='ftest')
+    # questions = models.ManyToManyField(Question)  # Вопросы финального теста
+
+    def __str__(self):
+        return f"Final Test for {self.course.title}"
+
+    class Meta:
+        verbose_name = 'Финальный тест'
+        verbose_name_plural = 'Финальные тесты' 
+    
+# Тест для статьи
+# class Test(models.Model):
+    # article = models.OneToOneField(Article, on_delete=models.CASCADE, related_name='tests')
+    # title = models.CharField(max_length=255)
+    # order = models.PositiveIntegerField(default=1)
+
+    # def __str__(self):
+    #     return f'Test {self.order} for {self.article.title}'
+
+    # class Meta:
+    #     verbose_name = 'Тест'
+    #     verbose_name_plural = 'Тесты'
+    #     ordering = ['order']
+
+
 # Вопрос
+
 class Question(models.Model):
     OPEN = 'open'
     CHOICE = 'choice'
@@ -30,17 +66,40 @@ class Question(models.Model):
         (CHOICE, 'Multiple choice'),
     ]
 
-    test = models.ForeignKey(Test, on_delete=models.CASCADE, related_name='questions')
-    text_description = models.TextField() #само задание
-    text_task = models.TextField() #содержание задания
+    # test = models.ForeignKey(BaseTest, on_delete=models.CASCADE, related_name='questions')
+    test = models.ForeignKey(Test, null=True, blank=True, on_delete=models.CASCADE, related_name='questions')
+    final_test = models.ForeignKey(FinalTest, null=True, blank=True, on_delete=models.CASCADE, related_name='questions')
+    text_description = models.TextField()  # Само задание
+    text_task = models.TextField()          # Содержание задания
     question_type = models.CharField(max_length=17, choices=[('multiple_choice', 'Multiple Choice'), ('text', 'Text')])
-    
+
     def __str__(self):
         return f'{self.text_task}'
-
     class Meta:
-        verbose_name = 'Вопрос'
-        verbose_name_plural = 'Вопросы'
+       verbose_name = 'Вопрос'
+       verbose_name_plural = 'Вопросы'
+    
+
+# class Question(models.Model):
+    # OPEN = 'open'
+    # CHOICE = 'choice'
+
+    # QUESTION_TYPES = [
+    #     (OPEN, 'Open-ended'),
+    #     (CHOICE, 'Multiple choice'),
+    # ]
+
+    # test = models.ForeignKey(Test, on_delete=models.CASCADE, related_name='questions')
+    # text_description = models.TextField() #само задание
+    # text_task = models.TextField() #содержание задания
+    # question_type = models.CharField(max_length=17, choices=[('multiple_choice', 'Multiple Choice'), ('text', 'Text')])
+    
+    # def __str__(self):
+    #     return f'{self.text_task}'
+
+    # class Meta:
+    #     verbose_name = 'Вопрос'
+    #     verbose_name_plural = 'Вопросы'
 
 
 # Вариант ответа
@@ -76,28 +135,30 @@ class OpenAnswer(models.Model):
 
 
 # Финальный тест по курсу
-class FinalTest(models.Model):
-    course = models.OneToOneField(Course, on_delete=models.CASCADE)
-    questions = models.ManyToManyField(Question)  # Вопросы финального теста
+# class FinalTest(models.Model):
+    # course = models.OneToOneField(Course, on_delete=models.CASCADE)
+    # # questions = models.ManyToManyField(Question)  # Вопросы финального теста
 
-    def __str__(self):
-        return f"Final Test for {self.course.title}"
+    # def __str__(self):
+    #     return f"Final Test for {self.course.title}"
 
-    class Meta:
-        verbose_name = 'Финальный тест'
-        verbose_name_plural = 'Финальные тесты'
+    # class Meta:
+    #     verbose_name = 'Финальный тест'
+    #     verbose_name_plural = 'Финальные тесты' 
 
 
 # Результаты финального теста
 class FinalTestResult(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # user = models.ForeignKey(User, on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     final_test = models.ForeignKey(FinalTest, on_delete=models.CASCADE)
     passed = models.BooleanField(default=False)
-    score = models.FloatField()
+    score = models.IntegerField()  # Количество правильных ответов
+    total_questions = models.IntegerField()  # Общее количество вопросов
     attempt_count = models.PositiveIntegerField(default=1)
 
     def __str__(self):
-        return f'{self.user.username} - Final Test {self.final_test.course.title} - {"Passed" if self.passed else "Failed"}'
+        return f' - Final Test {self.final_test.course.title} - {"Passed" if self.passed else "Failed"}'
 
     class Meta:
         verbose_name = 'Результат финального теста'
