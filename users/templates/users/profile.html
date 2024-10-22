@@ -17,6 +17,19 @@
                             <li class="list-group-item">Вы пока не записаны на курсы.</li>
                         {% endfor %}
                     </ul>
+                    
+                    <h4>Результаты финальных тестов</h4>
+                    <ul class="list-group mb-4">
+                        {% for result in final_test_results %}
+                            <li class="list-group-item">
+                                Курс {{ result.final_test.course.title }}: {{ result.score }} баллов из {{ result.total_questions }}
+                                <a href="{% url 'download_certificate' result.final_test.course.id %}" class="btn btn-success float-right">Скачать сертификат</a>
+                            </li>
+                        {% empty %}
+                            <li class="list-group-item">Вы пока не прошли ни один финальный тест.</li>
+                        {% endfor %}
+                    </ul>
+
                     <h4>Информация о пользователе</h4>
                     <p>Имя: {{ user.username }}</p>
                     {% if user.email %}

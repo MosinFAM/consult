@@ -30,4 +30,5 @@ urlpatterns = [
     path('logout/', logout_view, name='logout'),
     path('profile/', user_views.profile, name='profile'),
     path('profile/edit/', user_views.edit_profile, name='edit_profile'),
+    path('download_certificate/<int:course_id>/', user_views.download_certificate, name='download_certificate'),
 ]
