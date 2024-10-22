@@ -87,7 +87,7 @@
         </ul>
         <div class="col-md-3 text-end large-font">
           {% if user.is_authenticated %}
-            <a href="{% url 'profile' %}" class="text-white mx-3">Профиль</a>
+            <a href="{% url 'profile' %}" class="text-white mx-3">{{user.username}}</a>
             <a href="{% url 'logout' %}" class="text-white mx-3">Выйти</a>
           {% else %}
             <a href="{% url 'register' %}" class="text-white text-margin p">Зарегистрироваться</a>
