@@ -118,7 +118,7 @@
             </form>
         {% endif %}
         
-        <form method="POST" style="text-align: right;">
+        <form method="POST" style="text-align: right;" action="{% url 'courses_by_category' course.id %}">
             {% csrf_token %}
             <button type="submit" name="unenroll" class="btn btn-secondary m-3">Покинуть курс</button>
         </form>
