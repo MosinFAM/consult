@@ -7,6 +7,8 @@ from main.models import Course
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=30, blank=True, null=True, verbose_name="Имя")
+    last_name = models.CharField(max_length=30, blank=True, null=True, verbose_name="Фамилия")
 
     def __str__(self):
         return f"{self.user.username} Профиль"
