@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .forms import UserRegisterForm, ProfileUpdateForm
+from .forms import UserRegisterForm, ProfileUpdateForm, UserUpdateForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from .models import Profile, Enrollment
@@ -8,7 +8,7 @@ from main.models import Course
 from tests.models import FinalTestResult
 from django.http import HttpResponse
 from django.template.loader import get_template, render_to_string
-from xhtml2pdf import pisa  # Библиотека для создания PDF
+# from xhtml2pdf import pisa  # Библиотека для создания PDF
 import io
 from django.http import FileResponse
 from reportlab.lib.pagesizes import letter
@@ -58,6 +58,7 @@ def profile(request):
     }
     return render(request, 'users/profile.html', context)
 
+
 @login_required
 def edit_profile(request):
     try:
@@ -66,17 +67,20 @@ def edit_profile(request):
         profile = Profile.objects.create(user=request.user)
 
     if request.method == 'POST':
-        u_form = ProfileUpdateForm(request.POST, instance=request.user)
-
-        if u_form.is_valid():
+        u_form = UserUpdateForm(request.POST, instance=request.user)
+        p_form = ProfileUpdateForm(request.POST, instance=request.user.profile)
+        
+        if u_form.is_valid() and p_form.is_valid():
             u_form.save()
-            messages.success(request, 'Account has been updated!')
+            p_form.save()
             return redirect('profile')
     else:
-        u_form = ProfileUpdateForm(instance=request.user)
+        u_form = UserUpdateForm(instance=request.user)
+        p_form = ProfileUpdateForm(instance=request.user.profile)
 
     context = {
         'u_form': u_form,
+        'p_form': p_form
     }
 
     return render(request, 'users/edit_profile.html', context)
@@ -110,6 +114,9 @@ def draw_wrapped_text(p, text, width, start_height, font_size, max_width):
 
 @login_required
 def download_certificate(request, course_id):
+    # Проверяем наличие имени и фамилии
+    if not request.user.profile.first_name or not request.user.profile.last_name:
+        return HttpResponse('Заполните имя и фамилию в профиле, чтобы получить сертификат.', status=400)
     try:
         final_test_result = FinalTestResult.objects.get(
             profile=request.user.profile,
@@ -150,7 +157,7 @@ def download_certificate(request, course_id):
     # Имя пользователя
     p.setFont("DejaVu", 24)
     p.setFillColor(colors.black)
-    p.drawCentredString(width / 2, height - 260, f"Вручён: {request.user.username}")
+    p.drawCentredString(width / 2, height - 260, f"Вручён: {request.user.profile.first_name} {request.user.profile.last_name}")
 
     # Название курса и результат теста с автоматическим переносом текста
     draw_wrapped_text(p, f"Курс: {final_test_result.final_test.course.title}", width, height - 320, 20, width - 100)
