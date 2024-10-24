@@ -195,7 +195,7 @@ def final_test_detail(request, course_id):
                         final_test=ftest,
                         score=score,
                         total_questions=total,
-                        passed=(score >= (total - 1))  # Логика прохождения теста
+                        passed=(score >= (total*0.6))  # Логика прохождения теста
                     )
         
 
