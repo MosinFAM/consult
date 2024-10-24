@@ -34,7 +34,8 @@ def course_detail(request, course_id):
     article = get_object_or_404(Article, id=course_id)
     is_enrolled = Enrollment.objects.filter(user=request.user, course=course).exists()
     tests = Test.objects.filter(article=article) 
-    passed_tests = TestResult.objects.filter(profile=profile, passed=True).values_list('test_id', flat=True)
+    # passed_tests = TestResult.objects.filter(profile=profile, passed=True).values_list('test_id', flat=True)
+    passed_tests = TestResult.objects.filter(profile=profile, passed=True, test__article__course=course).values_list('test_id', flat=True).distinct()
     print("LEN OF PASSED:", len(passed_tests))
     passed_test_ids = set(passed_tests)
 

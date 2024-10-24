@@ -116,6 +116,8 @@
                 {% csrf_token %}
                 <button type="submit" class="btn btn-primary large-button">Пройти финальное тестирование</button>
             </form>
+            {% comment %} <p>Количество пройденных тестов: {{ passed_tests|length }}</p>
+            <p>Общее количество статей: {{ course.article_set.count }}</p> {% endcomment %}
         {% endif %}
         
         <form method="POST" style="text-align: right;" action="{% url 'courses_by_category' course.id %}">
