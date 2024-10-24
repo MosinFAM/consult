@@ -29,70 +29,63 @@ def test_detail_ok(request, course_id, article_id, test_id):
 @login_required
 def test_detail(request, course_id, article_id, test_id):
     print(f"Querying Profile with course_id={course_id}, article_id={article_id}, test_id={test_id}")
+    
+    # Получаем объекты курса, статьи, теста и профиля пользователя
     course = get_object_or_404(Course, id=course_id)
-    print(f"Found course: {course}")
     article = get_object_or_404(Article, id=article_id, course=course)
-    print(f"Found course: {article}")
     test = get_object_or_404(Test, id=test_id, article=article)
     profile = get_object_or_404(Profile, user=request.user)
+    
+    # Получаем все вопросы текущего теста
     questions = test.questions.all()
 
     if request.method == 'POST':
         score = 0
         total = questions.count()
-        # Создаем список для хранения текстовых ответов
         text_answers = {}
 
+        # Проходим по каждому вопросу теста
         for question in questions:
             field_name = f'question_{question.id}'
             user_answer = request.POST.get(field_name)
 
+            # Обрабатываем ответы на выборочные вопросы
             if question.question_type == 'multiple_choice':
                 try:
                     selected_answer = Answer.objects.get(id=user_answer, question=question)
                     if selected_answer.is_correct:
                         score += 1
                 except Answer.DoesNotExist:
-                    pass  # Неверный выбор или не выбран ответ
+                    pass  # Ответ неверный или не выбран
 
+            # Обрабатываем текстовые ответы
             elif question.question_type == 'text':
-                # Сохраняем текстовый ответ
-                text_answers[question.id] = user_answer.strip()  # Убираем пробелы в начале и конце
-                # if text_answers[question.id].is_correct:
-                score += 1 
+                if user_answer:
+                    text_answers[question.id] = user_answer.strip()  # Убираем лишние пробелы
+                    score += 1  # По умолчанию добавляем балл, но это может изменяться в зависимости от требований
 
-        # Здесь вы можете обрабатывать текстовые ответы для хранения
-        for question_id, user_answer in text_answers.items():
-            last_result = TestResult.objects.filter(profile=profile, test=test).order_by('-id').first()
-            # Вы можете создать отдельную модель для хранения текстовых ответов или
-            # просто добавить текст ответа в TestResult
-            if last_result:
-        # Если результат уже существует, обновляем его
-                last_result.score = score
-                last_result.total_questions = total
-                last_result.passed = (score >= (total - 1))
-                last_result.answer_text = user_answer  # Обновляем текст ответа
-                last_result.save()  # Сохраняем изменения
-            else:
-                # Если результата нет, создаем новый
-                TestResult.objects.create(
-                    profile=profile,
-                    test=test,
-                    score=score,
-                    total_questions=total,
-                    passed=(score >= (total - 1)), 
-                    answer_text=user_answer  # Сохраняем текст ответа
-                )
-            # TestResult.objects.create(
-            #     profile=profile,
-            #     test=test,
-            #     score=score,
-            #     total_questions=total,
-            #     passed=(score >= (total - 1)), 
-            #     answer_text=user_answer  # Сохраняем текст ответа
-            # )
+        # Сохраняем результат теста
+        last_result = TestResult.objects.filter(profile=profile, test=test).order_by('-id').first()
+        
+        if last_result:
+            # Если результат уже существует, обновляем его
+            last_result.score = score
+            last_result.total_questions = total
+            last_result.passed = (score >= (total - 1))  # Порог прохождения теста (можно менять)
+            last_result.save()
+        else:
+            # Если результата нет, создаем новый
+            TestResult.objects.create(
+                profile=profile,
+                test=test,
+                score=score,
+                total_questions=total,
+                passed=(score >= (total - 1))  # Условие прохождения теста
+            )
 
+        # Перенаправляем на страницу с результатами теста
         return redirect('test_results', course_id=course.id, article_id=article.id, test_id=test.id)
+
     print(f"Found test: {test}")
     return render(request, 'tests/test_detail.html', {
         'course': course,
